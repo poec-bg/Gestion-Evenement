@@ -8,5 +8,18 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://C:/outils/play-1.4.2/play-1.4.2/framework" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://C:/outils/play-1.4.2/play-1.4.2/framework/src" />
+          <root url="file://C:/outils/play-1.4.2/play-1.4.2/framework/test-src" />
+        </SOURCES>
+        <jarDirectory url="file://C:/outils/play-1.4.2/play-1.4.2/framework" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
