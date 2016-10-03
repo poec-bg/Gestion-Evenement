@@ -1,6 +1,5 @@
 package models;
 
-import org.hibernate.mapping.List;
 import org.joda.time.DateTime;
 
 public class Evenement {
@@ -11,4 +10,5 @@ public class Evenement {
     public DateTime dateDebut;
     public DateTime dateFin;
     public Invite[] invites;
+    public String lieu;
 }
