@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Play framwork">
+    <CLASSES>
+      <root url="file://C:/ProgFiles/play-1.4.2/framework/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://C:/ProgFiles/play-1.4.2/framework/lib" recursive="false" />
+  </library>
+</component>
