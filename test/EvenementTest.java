@@ -6,6 +6,9 @@ import services.EvenementService;
 
 import java.util.Date;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 public class EvenementTest {
     EvenementService evenementService = EvenementService.get();
     Evenement evenementTest1, evenementTest2;
@@ -23,6 +26,89 @@ public class EvenementTest {
         evenementTest2.dateFin = new DateTime().plusHours(28).toDate();
     }
 
-//Tests sur les fonctions d'ajout
-    
+//Tests sur les fonctions : addEvent
+    @Test
+    public void addEvent_OK(){
+        try {
+            evenementService.addEvent(evenementTest1);
+        } catch (Exception e) {
+            fail();
+        }
+        assertTrue(true);
+    }
+    @Test
+    public void addEvent_DebutApresFin(){
+        Evenement evenementTest = new Evenement();
+        evenementTest.nom = "TEST 1";
+        evenementTest.idCreateur = "test@test.org";
+        evenementTest.dateDebut = new DateTime().toDate();
+        evenementTest.dateFin = new DateTime().minusHours(8).toDate();
+        try {
+            evenementService.addEvent(evenementTest);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+        fail();
+    }
+    @Test
+    public void addEvent_nomNull(){
+        Evenement evenementTest = new Evenement();
+        evenementTest.nom = null;
+        evenementTest.idCreateur = "test@test.org";
+        evenementTest.dateDebut = new DateTime().toDate();
+        evenementTest.dateFin = new DateTime().minusHours(8).toDate();
+        try {
+            evenementService.addEvent(evenementTest);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+        fail();
+    }
+    @Test
+    public void addEvent_nomVide(){
+        Evenement evenementTest = new Evenement();
+        evenementTest.nom = "";
+        evenementTest.idCreateur = "test@test.org";
+        evenementTest.dateDebut = new DateTime().toDate();
+        evenementTest.dateFin = new DateTime().minusHours(8).toDate();
+        try {
+            evenementService.addEvent(evenementTest);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+        fail();
+    }
+    @Test
+    public void addEvent_idCreateurNull(){
+        Evenement evenementTest = new Evenement();
+        evenementTest.nom = "TEST_addEvent";
+        evenementTest.idCreateur = null;
+        evenementTest.dateDebut = new DateTime().toDate();
+        evenementTest.dateFin = new DateTime().minusHours(8).toDate();
+        try {
+            evenementService.addEvent(evenementTest);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+        fail();
+    }
+    @Test
+    public void addEvent_idCreateurVide(){
+        Evenement evenementTest = new Evenement();
+        evenementTest.nom = "TEST_addEvent";
+        evenementTest.idCreateur = "";
+        evenementTest.dateDebut = new DateTime().toDate();
+        evenementTest.dateFin = new DateTime().minusHours(8).toDate();
+        try {
+            evenementService.addEvent(evenementTest);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+        fail();
+    }
+//Tests sur la fonctions :listEvent
+
+//Tests sur la fonctions : getEvent
+//Tests sur lA fonctions : updateEvent
+//Tests sur lA fonctions : deleteEvent
 }

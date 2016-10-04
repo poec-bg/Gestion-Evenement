@@ -38,7 +38,8 @@ public class EvenementService {
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
-        estOk = estOk && validateIdCreateur(evenement.nom);
+        estOk = estOk && validateIdCreateur(evenement.idCreateur);
+        estOk = estOk && validateNom(evenement.nom);
         if(!estOk){
             throw new Exception("Invalide argument exception.");
         }else {
@@ -111,15 +112,28 @@ public class EvenementService {
 
 //Règles de validité de la classe Evenement
     private boolean validateDates(Date debut, Date fin){
-        if( debut.before(fin) ) {
-            return  true;
-        }else {
+        //règle : date de début <= date de fin
+        if( debut.after(fin) ) {
             return false;
         }
+        return  true;
     }
 
     private boolean validateIdCreateur(String id){
-        //TODO
+        //règle : l'id ne peut être vide
+        if(id == null | id == ""){
+            return false;
+        }
+        //règle l'id doit faire partie des utilisateurs connus
+        //TODO a compléter avec UtilisateurService
+        return true;
+    }
+
+    private boolean validateNom(String nom){
+        //règle : le nom ne peut être vide
+        if(nom == null | nom == ""){
+            return false;
+        }
         return true;
     }
 }
