@@ -79,26 +79,19 @@ public class UtilisateurService {
 
       // Lister les utilisateurs
 
-    public void listUtilisateurs( ){
+    public   List <Utilisateur> listUtilisateurs( ){
         Session session = HibernateUtils.getSession();
-        Transaction tx = null;
-        try{
-            tx = session.beginTransaction();
-            List utilisateurs = session.createQuery("FROM Utilisateur ").list();
+
+
+            List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur  ").list();
             for (Iterator iterator =
                  utilisateurs.iterator(); iterator.hasNext();){
                 Utilisateur utilisateur = (Utilisateur) iterator.next();
-                System.out.print("Email: " + utilisateur.email);
-                System.out.print("  Nom: " + utilisateur.nom);
-                System.out.println("  Prenom: " + utilisateur.prenom);
+
             }
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
+        session.close();
+        return utilisateurs;
+
     }
 
 
