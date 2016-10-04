@@ -10,11 +10,18 @@
                 <strong>Date - </strong>début : ${event.dateDebut} - fin : ${event.dateFin}
             </li>
             <li class="list-group-item">${event.description}</li>
-            *{TODO listing des invités}*
-            <li class="list-group-item">
-                <a href="#">${event.invites}</a>
-            </li>
+        *{TODO listing des invités}*
+        #{if event.invites.size() == 0}
+            <li class="list-group-item"><i>pas d'invité</i></li>
+        #{/if}
+        #{else }
+            #{list event.invites, as:'invite'}
+                <li class="list-group-item">
+                    <a href="@{UtilisateurController.utilisateur(invite.email)}">${invite.email}</a>
+                </li>
+            #{/list}
+        #{/else}
         </ul>
     </div>
-    <a href="@{EvenementController.Evenementlist()}" class="btn btn-default">Retour</a>
+    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
 </div>

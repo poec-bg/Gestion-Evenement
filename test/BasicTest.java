@@ -1,4 +1,5 @@
 import models.Evenement;
+import models.Utilisateur;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Test;
@@ -32,5 +33,25 @@ public class BasicTest extends UnitTest {
             session.close();
         }
         assertTrue(idResultat >= 0);
+    }
+
+    @Test
+    public void hybernateSaveUtilisateur(){
+        String idResultat = "";
+        Utilisateur user = new Utilisateur();
+        user.email = "test@test.fr";
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+                idResultat = (String) session.save(user);
+            tx.commit();
+        }catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }finally {
+            session.close();
+        }
+        assertTrue(idResultat.length() > 0);
     }
 }

@@ -3,15 +3,17 @@ package models;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Evenement {
+public class Evenement implements Serializable{
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     public long idEvenement;
-    public String idCreateur;
+    @ManyToOne
+    public Utilisateur createur;
     public String nom;
     public String description;
     @Temporal(TemporalType.TIMESTAMP)
