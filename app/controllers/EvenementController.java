@@ -4,10 +4,8 @@ import models.Evenement;
 import models.Invite;
 import models.Utilisateur;
 import play.Logger;
-import play.data.binding.types.DateTimeBinder;
 import play.data.validation.Required;
 import play.mvc.Controller;
-import services.EvenementService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class EvenementController extends Controller{
 
-    public static void evenementList(){
+    public static void eventList(){
 
         Utilisateur user;
         user = new Utilisateur();
@@ -79,7 +77,7 @@ public class EvenementController extends Controller{
         render(evenementList);
     }
 
-    public static void evenement(Long idEvenement){
+    public static void event(Long idEvenement){
         Utilisateur user;
         user = new Utilisateur();
         user.nom = "Bomber";
@@ -155,8 +153,8 @@ public class EvenementController extends Controller{
 
         for (Evenement event : evenementList) {
             if (event.idEvenement == idEvenement){
-                Logger.debug("evenement id : " + event.idEvenement);
-                Logger.debug("evenement : " + event.nom);
+                Logger.debug("event id : " + event.idEvenement);
+                Logger.debug("event : " + event.nom);
                 Logger.debug("date de début : " + event.dateDebut);
                 render(event);
             }
@@ -191,7 +189,7 @@ public class EvenementController extends Controller{
         }
 
 
-        EvenementController.evenementList();
+        EvenementController.eventList();
     }
 
 }

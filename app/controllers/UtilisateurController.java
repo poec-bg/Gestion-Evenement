@@ -10,7 +10,7 @@ import java.util.List;
 public class UtilisateurController extends Controller{
 
 
-    public static void utilisateurList() {
+    public static void userList() {
         List<Utilisateur> utilisateurs;
 
         Utilisateur utilisateur1;
@@ -44,7 +44,7 @@ public class UtilisateurController extends Controller{
         render(utilisateurs);
     }
 
-    public static void utilisateur(String email) {
+    public static void user(String email) {
         List<Utilisateur> utilisateurs;
 
         Utilisateur utilisateur1;
@@ -86,13 +86,13 @@ public class UtilisateurController extends Controller{
         }
     }
 
-    public static Utilisateur utilisateurCreation() {
+    public static Utilisateur newUser() {
         //TODO implementer le formulaire de création d'un utilisateur
         render();
         return null;
     }
 
-    public static Utilisateur utilisateurModification(String email) {
+    public static Utilisateur saveUser() {
         //TODO implementer le formulaire de modification d'un utilisateur
         render();
         return null;
