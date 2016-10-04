@@ -69,9 +69,47 @@ public class EvenementService {
         return listResultats;
     }
 
+    //Récupération d'un évènement par son ID
+    public Evenement getEvent(long id){
+        Session session = HibernateUtils.getSession();
+            Evenement resultat = (Evenement) session.get("Evenement", id);
+        session.close();
+        return resultat;
+    }
 
+    //Update evenement
+    public void updateEvent(Evenement evenement) throws Exception {
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.update(evenement);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            throw new Exception("HibernateException: " + e.getMessage() );
+        }finally {
+            session.close();
+        }
+    }
 
-    //Règles de validité de la classe Evenement
+    //DELETE evenement
+    public void deleteEvent(Evenement evenement) throws Exception {
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.delete(evenement);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            throw new Exception("HibernateException: " + e.getMessage() );
+        }finally {
+            session.close();
+        }
+    }
+
+//Règles de validité de la classe Evenement
     private boolean validateDates(Date debut, Date fin){
         if( debut.before(fin) ) {
             return  true;
