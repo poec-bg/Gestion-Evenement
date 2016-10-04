@@ -1,0 +1,20 @@
+#{extends 'main.html' /}
+#{set title:'Calendar - Liste des utilisateurs' /}
+
+<div class="container">
+    <h1>Liste des utilisateurs :</h1>
+    #{if utilisateurs == null}
+    <h3><i>pas d'utilisateur</i></h3>
+    #{/if}
+    #{list utilisateurs, as:'user'}
+        <div class="container">
+            <ul class="list-group">
+                <a href="@{UtilisateurController.utilisateur(user.email)}" class="list-group-item">
+                    ${user.prenom} <strong>${user.nom}</strong>
+                </a>
+
+            </ul>
+        </div>
+    #{/list}
+    <a href="@{Application.index}" class="btn btn-default">Retour</a>
+</div>
