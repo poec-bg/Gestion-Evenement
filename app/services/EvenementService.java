@@ -1,6 +1,7 @@
 package services;
 
 import models.Evenement;
+import models.Utilisateur;
 import org.hibernate.*;
 import java.util.Date;
 import java.util.List;
@@ -23,13 +24,13 @@ public class EvenementService {
      *  Enregistre un nouvelle évènement [nom] par [idCreateur] avec pour péridode [debut] à [fin]
      *  Fait appel à sa methode soeur addEvent(Evenement evenement)
      */
-    public void addEvent(Date debut, Date fin, String nom, String idCreateur) throws Exception {
+    public void addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws Exception {
         //création de l'objet
         Evenement evenement = new Evenement();
         evenement.nom = nom;
         evenement.dateDebut = debut;
         evenement.dateFin = fin;
-        evenement.idCreateur = idCreateur;
+        evenement.createur = createur;
         addEvent(evenement);
     }
 
@@ -38,7 +39,8 @@ public class EvenementService {
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
-        estOk = estOk && validateIdCreateur(evenement.nom);
+        estOk = estOk && validateIdCreateur(evenement.createur);
+        estOk = estOk && validateNom(evenement.nom);
         if(!estOk){
             throw new Exception("Invalide argument exception.");
         }else {
@@ -69,19 +71,70 @@ public class EvenementService {
         return listResultats;
     }
 
+    //Récupération d'un évènement par son ID
+    public Evenement getEvent(long id){
+        Session session = HibernateUtils.getSession();
+            Evenement resultat = (Evenement) session.get("Evenement", id);
+        session.close();
+        return resultat;
+    }
 
-
-    //Règles de validité de la classe Evenement
-    private boolean validateDates(Date debut, Date fin){
-        if( debut.before(fin) ) {
-            return  true;
-        }else {
-            return false;
+    //Update evenement
+    public void updateEvent(Evenement evenement) throws Exception {
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.update(evenement);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            throw new Exception("HibernateException: " + e.getMessage() );
+        }finally {
+            session.close();
         }
     }
 
-    private boolean validateIdCreateur(String id){
-        //TODO
+    //DELETE evenement
+    public void deleteEvent(Evenement evenement) throws Exception {
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.delete(evenement);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            throw new Exception("HibernateException: " + e.getMessage() );
+        }finally {
+            session.close();
+        }
+    }
+
+//Règles de validité de la classe Evenement
+    private boolean validateDates(Date debut, Date fin){
+        //règle : date de début <= date de fin
+        if( debut.after(fin) ) {
+            return false;
+        }
+        return  true;
+    }
+
+    private boolean validateIdCreateur(Utilisateur utilisateur){
+        //règle : l'id ne peut être vide
+        if(utilisateur == null | utilisateur.email == null | utilisateur.email == ""){
+            return false;
+        }
+        //règle l'id doit faire partie des utilisateurs connus
+        //TODO a compléter avec UtilisateurService
+        return true;
+    }
+
+    private boolean validateNom(String nom){
+        //règle : le nom ne peut être vide
+        if(nom == null | nom == ""){
+            return false;
+        }
         return true;
     }
 }

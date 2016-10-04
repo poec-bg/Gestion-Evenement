@@ -32,7 +32,7 @@ public class EvenementController extends Controller{
 
         event1 = new Evenement();
         event1.idEvenement = 1;
-        event1.idCreateur = user.email;
+        event1.createur = user;
         event1.dateDebut = new Date(2016, 10, 4, 12, 30);
         event1.dateFin = new Date(21016, 10, 4, 14, 0);
         event1.nom = "RDV 1";
@@ -41,7 +41,7 @@ public class EvenementController extends Controller{
 
         event2 = new Evenement();
         event1.idEvenement = 2;
-        event2.idCreateur = user.email;
+        event2.createur = user;
         event2.dateDebut = new Date(2016, 10, 5, 9, 0);
         event2.dateFin = new Date(21016, 10, 5, 18, 0);
         event2.nom = "super RDV";
@@ -50,7 +50,7 @@ public class EvenementController extends Controller{
 
         event3 = new Evenement();
         event1.idEvenement = 3;
-        event3.idCreateur = user.email;
+        event3.createur = user;
         event3.dateDebut = new Date(2016, 10, 6, 17, 0);
         event3.dateFin = new Date(21016, 10, 6, 18, 0);
         event3.nom = "un évenement tou ce qu'il y a de plus normal";
@@ -59,7 +59,7 @@ public class EvenementController extends Controller{
 
         event4 = new Evenement();
         event1.idEvenement = 4;
-        event4.idCreateur = user.email;
+        event4.createur = user;
         event4.dateDebut = new Date(2016, 10, 5, 10, 0);
         event4.dateFin = new Date(21016, 10, 5, 11, 30);
         event4.nom = "RDV 4";
@@ -94,7 +94,7 @@ public class EvenementController extends Controller{
 
         event1 = new Evenement();
         event1.idEvenement = 1;
-        event1.idCreateur = user.email;
+        event1.createur = user;
         event1.dateDebut = new Date(2016, 10, 4, 12, 30);
         event1.dateFin = new Date(21016, 10, 4, 14, 0);
         event1.nom = "RDV 1";
@@ -103,7 +103,7 @@ public class EvenementController extends Controller{
 
         event2 = new Evenement();
         event1.idEvenement = 2;
-        event2.idCreateur = user.email;
+        event2.createur = user;
         event2.dateDebut = new Date(2016, 10, 5, 9, 0);
         event2.dateFin = new Date(21016, 10, 5, 18, 0);
         event2.nom = "super RDV";
@@ -112,7 +112,7 @@ public class EvenementController extends Controller{
 
         event3 = new Evenement();
         event1.idEvenement = 3;
-        event3.idCreateur = user.email;
+        event3.createur = user;
         event3.dateDebut = new Date(2016, 10, 6, 17, 0);
         event3.dateFin = new Date(21016, 10, 6, 18, 0);
         event3.nom = "un évenement tou ce qu'il y a de plus normal";
@@ -121,7 +121,7 @@ public class EvenementController extends Controller{
 
         event4 = new Evenement();
         event1.idEvenement = 4;
-        event4.idCreateur = user.email;
+        event4.createur = user;
         event4.dateDebut = new Date(2016, 10, 5, 10, 0);
         event4.dateFin = new Date(21016, 10, 5, 11, 30);
         event4.nom = "RDV 4";
