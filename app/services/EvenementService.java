@@ -69,7 +69,7 @@ public class EvenementService {
         return listResultats;
     }
 
-    
+
 
     //Règles de validité de la classe Evenement
     private boolean validateDates(Date debut, Date fin){
