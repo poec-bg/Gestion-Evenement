@@ -1,15 +1,12 @@
 package services;
 
 import models.Evenement;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.joda.time.DateTime;
+import org.hibernate.*;
+import java.util.Date;
+import java.util.List;
 
 public class EvenementService {
     private static EvenementService monInstance;
-    private static Session session = null;
 
     private EvenementService(){
 
@@ -22,21 +19,30 @@ public class EvenementService {
         return monInstance;
     }
 
-    //Créer un nouvelle évènement [nom] par [idCreateur] avec pour péridode [debut] à [fin]
-    public void createEvent(DateTime debut, DateTime fin, String nom, String idCreateur) throws Exception {
+    /**
+     *  Enregistre un nouvelle évènement [nom] par [idCreateur] avec pour péridode [debut] à [fin]
+     *  Fait appel à sa methode soeur addEvent(Evenement evenement)
+     */
+    public void addEvent(Date debut, Date fin, String nom, String idCreateur) throws Exception {
+        //création de l'objet
+        Evenement evenement = new Evenement();
+        evenement.nom = nom;
+        evenement.dateDebut = debut;
+        evenement.dateFin = fin;
+        evenement.idCreateur = idCreateur;
+        addEvent(evenement);
+    }
+
+    //Enregistre un nouvelle évènement à partir d'un objet Evenement [evenemnt]
+    public void addEvent(Evenement evenement) throws Exception {
         //vérifications
         boolean estOk = true;
-        estOk = estOk && validateDates(debut, fin);
-        estOk = estOk && validateIdCreateur(nom);
+        estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
+        estOk = estOk && validateIdCreateur(evenement.nom);
         if(!estOk){
             throw new Exception("Invalide argument exception.");
         }else {
-            //création & enregistrement
-            Evenement evenement = new Evenement();
-            evenement.nom = nom;
-            evenement.dateDebut = debut.toDate();
-            evenement.dateFin = fin.toDate();
-            evenement.idCreateur = idCreateur;
+            //enregistrement
             Session session = HibernateUtils.getSession();
             Transaction tx = null;
             try{
@@ -52,10 +58,22 @@ public class EvenementService {
         }
     }
 
+    //Lister des évènement entre les dates [debut] et [fin]
+    public List<Evenement> listEvent(Date debut, Date fin){
+        Session session = HibernateUtils.getSession();
+        List<Evenement> listResultats = session.createQuery("FROM Evenement WHERE dateDebut > :dtFin AND dateFin < :dtDebut")
+                .setDate("dtDebut", debut)
+                .setDate("dtFin", fin)
+                .list();
+        session.close();
+        return listResultats;
+    }
+
+    
 
     //Règles de validité de la classe Evenement
-    private boolean validateDates(DateTime debut, DateTime fin){
-        if(debut.isBefore(fin)) {
+    private boolean validateDates(Date debut, Date fin){
+        if( debut.before(fin) ) {
             return  true;
         }else {
             return false;
