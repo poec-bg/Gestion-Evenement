@@ -2,4 +2,5 @@
 
 require:
     - play
+    - org.mindrot -> jbcrypt 0.3m
     - com.google.guava -> guava 19.0
