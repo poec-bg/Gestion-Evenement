@@ -24,18 +24,19 @@ public class EvenementService {
      *  Enregistre un nouvelle évènement [nom] par [idCreateur] avec pour péridode [debut] à [fin]
      *  Fait appel à sa methode soeur addEvent(Evenement evenement)
      */
-    public void addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws Exception {
+    public Evenement addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws Exception {
         //création de l'objet
         Evenement evenement = new Evenement();
         evenement.nom = nom;
         evenement.dateDebut = debut;
         evenement.dateFin = fin;
         evenement.createur = createur;
-        addEvent(evenement);
+        Evenement resultat = addEvent(evenement);
+        return resultat;
     }
 
     //Enregistre un nouvelle évènement à partir d'un objet Evenement [evenemnt]
-    public void addEvent(Evenement evenement) throws Exception {
+    public Evenement addEvent(Evenement evenement) throws Exception {
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
@@ -49,7 +50,7 @@ public class EvenementService {
             Transaction tx = null;
             try{
                 tx = session.beginTransaction();
-                session.save(evenement);
+                    evenement.idEvenement = (long) session.save(evenement);
                 tx.commit();
             }catch (HibernateException e) {
                 if (tx!=null) tx.rollback();
@@ -58,6 +59,7 @@ public class EvenementService {
                 session.close();
             }
         }
+        return evenement;
     }
 
     //Lister des évènement entre les dates [debut] et [fin]
