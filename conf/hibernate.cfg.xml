@@ -22,5 +22,6 @@
 		<!-- Fichiers à mapper -->
 		<mapping class="models.Evenement" />
 		<mapping class="models.Invite" />
+		<mapping class="models.Utilisateur" />
 	</session-factory>
 </hibernate-configuration>

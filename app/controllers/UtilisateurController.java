@@ -12,7 +12,6 @@ public class UtilisateurController extends Controller{
 
     public static void utilisateurList() {
         List<Utilisateur> utilisateurs;
-        Utilisateur utilisateur;
 
         Utilisateur utilisateur1;
         Utilisateur utilisateur2;
@@ -78,14 +77,13 @@ public class UtilisateurController extends Controller{
         for (Utilisateur user :
                 utilisateurs) {
             if (user.email.contains(email)){
-                System.out.println("user.nom : " + user.nom);
-                System.out.println("user.prenom : " + user.prenom);
-                System.out.println("user.email : " + user.email);
-                System.out.println("user.motDePasse : " + user.motDePasse);
+                Logger.debug("user.nom : " + user.nom);
+                Logger.debug("user.prenom : " + user.prenom);
+                Logger.debug("user.email : " + user.email);
+                Logger.debug("user.motDePasse : " + user.motDePasse);
                 render(user);
             }
         }
-//        utilisateurs.stream().filter(utilisateur -> utilisateur.email == email).forEach(Controller::render);
     }
 
     public static Utilisateur utilisateurCreation() {
