@@ -13,7 +13,8 @@ GET     /utilisateurList                        UtilisateurController.utilisateu
 GET     /utilisateur/{email}                    UtilisateurController.utilisateur
 
 # Evenement
-GET     /evenements                             EvenementController.evenements
+GET     /evenements                             EvenementController.evenementList
+GET     /evenement/{dateDebut}                  EvenementController.evenement
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

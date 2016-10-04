@@ -1,0 +1,20 @@
+#{extends 'main.html' /}
+#{set title:'Calendar - Liste des évenements' /}
+
+<div class="container">
+    <h1>Liste des évenements :</h1>
+    <div class="container">
+        <ul class="list-group">
+            <li class="list-group-item active"><strong>${event.nom}</strong> - Lieu : ${event.lieu}</li>
+            <li class="list-group-item">
+                <strong>Date - </strong>début : ${event.dateDebut} - fin : ${event.dateFin}
+            </li>
+            <li class="list-group-item">${event.description}</li>
+            *{TODO listing des invités}*
+            <li class="list-group-item">
+                <a href="#">${event.invites}</a>
+            </li>
+        </ul>
+    </div>
+    <a href="@{EvenementController.Evenementlist()}" class="btn btn-default">Retour</a>
+</div>
