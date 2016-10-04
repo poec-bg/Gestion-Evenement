@@ -10,16 +10,19 @@
                 <strong>Date - </strong>début : ${event.dateDebut} - fin : ${event.dateFin}
             </li>
             <li class="list-group-item">${event.description}</li>
-        *{TODO listing des invités}*
         #{if event.invites.size() == 0}
             <li class="list-group-item"><i>pas d'invité</i></li>
         #{/if}
         #{else }
-            #{list event.invites, as:'invite'}
-                <li class="list-group-item">
-                    <a href="@{UtilisateurController.utilisateur(invite.email)}">${invite.email}</a>
-                </li>
-            #{/list}
+            <li class="list-group-item">
+                Liste des invités :
+                <div class="container">
+                    #{list event.invites, as:'invite'}
+                        <br>
+                        <a href="@{UtilisateurController.utilisateur(invite.email)}">${invite.email}</a>
+                    #{/list}
+                </div>
+            </li>
         #{/else}
         </ul>
     </div>

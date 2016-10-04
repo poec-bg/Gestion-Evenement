@@ -4,8 +4,12 @@ import models.Evenement;
 import models.Invite;
 import models.Utilisateur;
 import play.Logger;
+import play.data.binding.types.DateTimeBinder;
+import play.data.validation.Required;
 import play.mvc.Controller;
+import services.EvenementService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -160,6 +164,37 @@ public class EvenementController extends Controller{
                 render(event);
             }
         }
+    }
+
+    public static void newEvent(){
+        render();
+    }
+
+    public static void saveEvent(@Required String nom,
+                                 String description,
+                                 String lieu,
+                                 @Required Date dateDebut,
+                                 String heureDebut/*,
+                                 @Required Date dateFin,
+                                 String heureFin,
+                                 @Required String idCreateur*/){
+        if (validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            validation.keep(); // keep the errors for the next request
+            newEvent();
+        }
+        try {
+            System.out.println("date debut : " + dateDebut);
+            System.out.println("heure debut : " + heureDebut);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(dateDebut));
+            System.out.println("parse de date debut : " + date);
+//            EvenementService.get().addEvent(dateDebut, dateFin, nom, "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        EvenementController.evenementList();
     }
 
 }

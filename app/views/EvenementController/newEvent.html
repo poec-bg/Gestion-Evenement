@@ -1,0 +1,67 @@
+#{extends 'main.html' /}
+#{set title:'Calendar - Liste des évenements' /}
+
+<div class="container">
+    <h1>Liste des évenements :</h1>
+    <div class="container clearfix">
+    #{ifErrors}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Erreur lors de la création du compte !
+        </div>
+    #{/ifErrors}
+        <form action="@{EvenementController.saveEvent()}" method="post">
+            <h2>Créer un évenement :</h2>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Nom</span>
+                <input class="form-control" type="text" name="nom" value="nom">
+                <span class="error">#{error 'nom' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">Description</span>
+                <input class="form-control" type="text" name="description" value="description">
+                <span class="error">#{error 'description' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Lieu</span>
+                <input class="form-control" type="text" name="lieu" value="lieu">
+                <span class="error">#{error 'lieu' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">Date de début</span>
+                <input class="form-control" type="date" name="dateDebut">
+                <span class="error">#{error 'dateDebut' /}</span>
+
+                <span class="input-group-addon" id="basic-addon5">Heure de début</span>
+                <input class="form-control" type="time" name="heureDebut">
+                <span class="error">#{error 'heureDebut' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon6">Date de fin</span>
+                <input class="form-control" type="date" name="dateFin">
+                <span class="error">#{error 'dateFin' /}</span>
+
+                <span class="input-group-addon" id="basic-addon7">Heure de fin</span>
+                <input class="form-control" type="time" name="heurFin">
+                <span class="error">#{error 'heureFin' /}</span>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon8">id createur</span>
+                <input class="form-control" type="text" name="idCreateur" value="abc123">
+                <span class="error">#{error 'idCreateur' /}</span>
+            </div>
+
+            <div class="pull-left input-group">
+                <input class="btn btn-primary" type="submit" value="Créer">
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-warning" href="javascript:history.back()">Annuler</a>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+</div>
