@@ -7,7 +7,6 @@
 db
 data
 documents
-eclipse
 lib
 log
 logs
@@ -23,9 +22,7 @@ server.pid
 modules
 cobertura.ser
 atlassian-ide-plugin.xml
-!conf/sql
 !app/exceptions
-!app/model
+!app/models
 !app/services
 !app/validators
-!public/lib
