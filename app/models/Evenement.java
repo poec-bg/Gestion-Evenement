@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 public class Evenement {
-    @Id
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
     public long idEvenement;
     public String idCreateur;
     public String nom;
