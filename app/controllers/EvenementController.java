@@ -1,12 +1,11 @@
 package controllers;
 
 import models.Evenement;
+import models.Invite;
 import models.Utilisateur;
 import play.Logger;
 import play.mvc.Controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,6 +130,27 @@ public class EvenementController extends Controller{
         evenementList.add(event2);
         evenementList.add(event3);
         evenementList.add(event4);
+
+        Invite invite1 = new Invite();
+        invite1.id = 1;
+        invite1.email = user.email;
+        invite1.evenement = event1;
+
+        Invite invite2 = new Invite();
+        invite2.id = 1;
+        invite2.email = user.email;
+        invite2.evenement = event1;
+
+        Invite invite3 = new Invite();
+        invite3.id = 1;
+        invite3.email = user.email;
+        invite3.evenement = event1;
+
+        List<Invite> invites = new ArrayList<>();
+        invites.add(invite1);
+        invites.add(invite2);
+        invites.add(invite3);
+        event1.invites = invites;
 
         for (Evenement event : evenementList) {
             if (event.idEvenement == idEvenement){
