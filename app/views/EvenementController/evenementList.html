@@ -6,16 +6,18 @@
 #{if evenementList == null}
     <h3><i>pas d'évenement</i></h3>
 #{/if}
-#{list evenementList, as:'event'}
-    <div class="container">
-        <ul class="list-group">
-            <li class="list-group-item" >
-                ${event.dateDebut} - ${event.dateFin} :
-                <a href="@{EvenementController.evenement(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
-            </li>
-            *{<li class="list-group-item">${event.description}</li>}*
-        </ul>
-    </div>
-#{/list}
-    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+#{else }
+    #{list evenementList, as:'event'}
+        <div class="container">
+            <ul class="list-group">
+                <li class="list-group-item" >
+                    ${event?.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event?.dateFin?.format("dd/MM/YY HH:mm")} :
+                    <a href="@{EvenementController.evenement(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
+                </li>
+                *{<li class="list-group-item">${event.description}</li>}*
+            </ul>
+        </div>
+    #{/list}
+#{/else}
+    <a href="@{Application.index()}" class="btn btn-default">Retour</a>
 </div>
