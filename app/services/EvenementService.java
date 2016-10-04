@@ -1,6 +1,7 @@
 package services;
 
 import models.Evenement;
+import models.Utilisateur;
 import org.hibernate.*;
 import java.util.Date;
 import java.util.List;
@@ -23,13 +24,13 @@ public class EvenementService {
      *  Enregistre un nouvelle évènement [nom] par [idCreateur] avec pour péridode [debut] à [fin]
      *  Fait appel à sa methode soeur addEvent(Evenement evenement)
      */
-    public void addEvent(Date debut, Date fin, String nom, String idCreateur) throws Exception {
+    public void addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws Exception {
         //création de l'objet
         Evenement evenement = new Evenement();
         evenement.nom = nom;
         evenement.dateDebut = debut;
         evenement.dateFin = fin;
-        evenement.idCreateur = idCreateur;
+        evenement.createur = createur;
         addEvent(evenement);
     }
 
@@ -38,7 +39,7 @@ public class EvenementService {
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
-        estOk = estOk && validateIdCreateur(evenement.idCreateur);
+        estOk = estOk && validateIdCreateur(evenement.createur);
         estOk = estOk && validateNom(evenement.nom);
         if(!estOk){
             throw new Exception("Invalide argument exception.");
@@ -119,9 +120,9 @@ public class EvenementService {
         return  true;
     }
 
-    private boolean validateIdCreateur(String id){
+    private boolean validateIdCreateur(Utilisateur utilisateur){
         //règle : l'id ne peut être vide
-        if(id == null | id == ""){
+        if(utilisateur == null | utilisateur.email == null | utilisateur.email == ""){
             return false;
         }
         //règle l'id doit faire partie des utilisateurs connus

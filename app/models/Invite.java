@@ -1,13 +1,12 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Invite {
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
-    public long id;
+public class Invite implements Serializable {
+    @Id
     public String email;
-    @OneToOne(cascade= CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @Id @ManyToOne @PrimaryKeyJoinColumn
     public Evenement evenement;
 }
