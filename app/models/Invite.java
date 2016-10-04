@@ -1,6 +1,13 @@
 package models;
 
+import javax.persistence.*;
+
+@Entity
 public class Invite {
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+    public long id;
     public String email;
-    public long idEvent;
+    @OneToOne(cascade= CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    public Evenement evenement;
 }

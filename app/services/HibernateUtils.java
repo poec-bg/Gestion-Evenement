@@ -8,12 +8,12 @@ import org.hibernate.cfg.AnnotationConfiguration;
 public class HibernateUtils {
 	private static final SessionFactory sessionFactory;
 	
-	//Cr�� une unique instance de l'objet
+	//Créé une unique instance de l'objet
 	static{
 		try{
 			sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
 		}catch(HibernateException e){
-			throw new RuntimeException("Probl�me de configuration hybernate : " + e.getMessage(), e);
+			throw new RuntimeException("Problème de configuration hybernate : " + e.getMessage(), e);
 		}
 	}
 	
