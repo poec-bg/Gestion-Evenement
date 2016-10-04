@@ -24,23 +24,23 @@ public class UtilisateurServiceTest {
     @AfterClass
     public static void apresClasse() {
 
-       UtilisateurService.get().clear();
+      //  UtilisateurService.get().clear();
 
     }
 
     @Before
     public void avantToutTest() {
-       UtilisateurService.get().clear();
+       // UtilisateurService.get().clear();
         try {
             utilisateur = UtilisateurService.get().create("luke.skywalker@gmail.com", "iamyourfather");
-
+            //UtilisateurService.get().modifier(client, "Skywalker", "Luke", "2 rue de Mos Eisley, Tatooine", "0123456789");
         } catch (Exception e) {
             fail();
         }
     }
 
 
-    // create
+    // creer
     @Test
     public void testCreate_everythingWrong() {
         // Given
@@ -58,7 +58,7 @@ public class UtilisateurServiceTest {
     }
 
     @Test
-    public void testCreate_emailPasswordVide() {
+    public void testCreer_emailPasswordVide() {
         // Given
         String email = "";
         String password = "";
@@ -78,7 +78,7 @@ public class UtilisateurServiceTest {
 
 
     @Test
-    public void testCreate_wrongEmail() {
+    public void testCreer_wrongEmail() {
         // Given
         String email = "luke.skywalker";
         String password = "iamyourfather";
