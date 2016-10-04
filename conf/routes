@@ -8,6 +8,13 @@ GET     /index                                  Application.index
 GET     /contact                                Application.contact
 GET     /apropos                                Application.apropos
 
+# Utilisateur
+GET     /utilisateurList                        UtilisateurController.utilisateurList
+GET     /utilisateur/{email}                    UtilisateurController.utilisateur
+
+# Evenement
+GET     /evenements                             EvenementController.evenements
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
