@@ -7,7 +7,7 @@
         <ul class="list-group">
             <li class="list-group-item active"><strong>${event.nom}</strong> - Lieu : ${event?.lieu}</li>
             <li class="list-group-item">
-                <strong>Date - </strong>début : ${event.dateDebut} - fin : ${event.dateFin}
+                <strong>Date - </strong>début : ${event.dateDebut.format("dd/MM/YY - HH:mm")} - fin : ${event.dateFin.format("dd/MM/YY - HH:mm")}
             </li>
             <li class="list-group-item">${event?.description}</li>
         #{if event.invites.size() == 0}
@@ -19,8 +19,7 @@
                 <div class="container">
                     #{list event.invites, as:'invite'}
                         <br>
-                        <!--TODO ajouter le lien vers l'invite-->
-                        <a href="#">${invite.email}</a>
+                        <span>${invite.email}</span>
                     #{/list}
                 </div>
             </li>
