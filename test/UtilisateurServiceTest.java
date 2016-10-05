@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import services.UtilisateurService;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -30,10 +31,10 @@ public class UtilisateurServiceTest {
 
     @Before
     public void avantToutTest() {
-       // UtilisateurService.get().clear();
+       UtilisateurService.get().clear();
         try {
             utilisateur = UtilisateurService.get().create("luke.skywalker@gmail.com", "iamyourfather");
-            //UtilisateurService.get().modifier(client, "Skywalker", "Luke", "2 rue de Mos Eisley, Tatooine", "0123456789");
+
         } catch (Exception e) {
             fail();
         }
@@ -90,6 +91,22 @@ public class UtilisateurServiceTest {
         } catch (InvalidArgumentException e) {
             // Then
             assertTrue(e.getRealMessage().contains("Le format de l'email est invalide"));
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testCreer_OK() {
+        // Given
+        String email = "anakin.skywalker@gmail.com";
+        String password = "iamyourfather";
+
+        // When
+        try {
+            Utilisateur utilisateur = UtilisateurService.get().create(email, password);
+            // Then
+            assertEquals("anakin.skywalker@gmail.com", utilisateur.email);
         } catch (Exception e) {
             fail();
         }
