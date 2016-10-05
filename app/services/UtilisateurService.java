@@ -38,7 +38,7 @@ public class UtilisateurService {
 
     // Création d'un nouvel utilisateur: email et mots de passe requis
 
-    public Utilisateur create(String email, String motDePasse) throws Exception {
+    public Utilisateur create(String email,String nom, String prenom, String motDePasse) throws Exception {
 
 
         List<String> validationMessages = new ArrayList<>();
@@ -59,6 +59,8 @@ public class UtilisateurService {
         Utilisateur utilisateur=new Utilisateur();
         utilisateur.email = email;
         utilisateur.motDePasse=motDePasse;
+        utilisateur.nom=nom;
+        utilisateur.prenom=prenom;
 
 
 
