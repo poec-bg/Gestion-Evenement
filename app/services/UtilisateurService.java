@@ -60,6 +60,7 @@ public class UtilisateurService {
         Utilisateur utilisateur=new Utilisateur();
         utilisateur.email = email;
         utilisateur.motDePasse=motDePasse;
+        utilisateur.isSupprime = false;
 
 
         Session session = HibernateUtils.getSession();
@@ -79,7 +80,7 @@ public class UtilisateurService {
     }
 
 
-    public Utilisateur createUtilisateur(String email,String nom, String prenom, String motDePasse) throws Exception {
+    public Utilisateur create(String email, String motDePasse, String nom, String prenom) throws Exception {
 
 
         List<String> validationMessages = new ArrayList<>();
@@ -102,6 +103,7 @@ public class UtilisateurService {
         utilisateur.motDePasse=motDePasse;
         utilisateur.nom=nom;
         utilisateur.prenom=prenom;
+        utilisateur.isSupprime = false;
 
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
@@ -136,20 +138,6 @@ public class UtilisateurService {
         if (utilisateur.prenom != prenom) {
             utilisateur.prenom = prenom;
         }
-    }
-
-    // Enregistrer les modifications
-
-    public void saveUpdateUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
-
-        List<String> validationMessages = new ArrayList<>();
-        if (utilisateur == null) {
-            validationMessages.add("L'utilisateur ne peut ?re null ou vide");
-        }
-        if (validationMessages.size() > 0) {
-            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
-        }
-
         Session session = HibernateUtils.getSession();
         Transaction t = session.beginTransaction();
         session.update(utilisateur);
@@ -157,13 +145,15 @@ public class UtilisateurService {
         session.close();
     }
 
+
+
       // Lister les utilisateurs
 
     public   List <Utilisateur> listUtilisateurs( ){
         Session session = HibernateUtils.getSession();
 
         List<Utilisateur> utilisateurs = new ArrayList<>();
-        Query query = session.createQuery("from Utilisateur");
+        Query query = session.createQuery("from Utilisateur where isSupprime =:false");
         utilisateurs = (List<Utilisateur>)query.list();
         System.out.println("taille user : " + utilisateurs.size());
         session.close();
@@ -178,6 +168,18 @@ public class UtilisateurService {
         Utilisateur utilisateur=(Utilisateur) session.get(Utilisateur.class, email);
         return utilisateur;
 
+    }
+
+    public void deleteUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
+        if (utilisateur == null) {
+            throw new InvalidArgumentException(new String[] { "L'utilisateur ne peut ?re null" });
+        }
+        utilisateur.isSupprime = true;
+        Session session = HibernateUtils.getSession();
+        Transaction t = session.beginTransaction();
+        session.update(utilisateur);
+        t.commit();
+        session.close();
     }
 
 

@@ -10,6 +10,7 @@ import play.mvc.Controller;
 import services.EvenementService;
 import sun.util.calendar.CalendarDate;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class EvenementController extends Controller{
     public static void event(Long idEvenement){
         Evenement event = EvenementService.get().getEvent(idEvenement);
 
+        //TODO enlever les invites a la mano quand le model sera fonctionnel
         Invite guest1 = new Invite();
         guest1.email = "toto@email.com";
         guest1.evenement = event;
@@ -68,7 +70,7 @@ public class EvenementController extends Controller{
                                  String lieu,
                                  @Required String dateDebutString,
                                  String heureDebut,
-                                 @Required Date dateFinString,
+                                 @Required String dateFinString,
                                  String heureFin){
         if (validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
@@ -79,16 +81,21 @@ public class EvenementController extends Controller{
         try {
             // String dateDebut = yyyy-MM-dd
             // String heureDebut = HH:mm
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            if (heureDebut == null || heureDebut == ""){
-                heureDebut = "00:00";
-            }
-            Date dateDebut = sdf.parse(dateDebutString + " " + heureDebut);
 
-            if (heureFin == null || heureFin == ""){
-                heureFin = "00:00";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            if (heureDebut == null || heureDebut.length() == 0){
+                heureDebut = "00:00";
+                System.out.println("heure debut mod : " + heureDebut);
             }
-            Date dateFin = sdf.parse(dateFinString + " " + heureFin);
+            System.out.println("date{"+dateDebutString+"} heure{"+heureDebut+"}");
+            Date dateDebut = sdf.parse("" + dateDebutString + " " + heureDebut + "");
+
+            if (heureFin == null || heureFin.length() == 0){
+                heureFin = "23:59";
+                System.out.println("heure fin mod : " + heureFin);
+            }
+            Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
 
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.email = "test@email.com";
