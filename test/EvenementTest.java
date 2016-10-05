@@ -19,12 +19,10 @@ public class EvenementTest {
     @BeforeClass
     public static void initTest(){
         user1 = new Utilisateur();
-        user1.email = "test@test.org";
+        user1.email = "testsEvenement@test.org";
         user1.motDePasse = "monMotDePasse";
-        user1.nom = "TEST";
-        user1.prenom = "Mon Super";
         try {
-            //UtilisateurService.get().create(user1.email, user1.motDePasse);
+            UtilisateurService.get().create(user1.email, user1.motDePasse);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,6 +38,12 @@ public class EvenementTest {
         evenementTest2.createur = user1;
         evenementTest2.dateDebut = new DateTime().plusHours(26).toDate();
         evenementTest2.dateFin = new DateTime().plusHours(28).toDate();
+    }
+
+    @AfterClass
+    public static void clearTests(){
+        //TODO: à ajouter après correction de la methode UtilisateurService.remove(XXX)
+//        UtilisateurService.get().remove(user1.email);
     }
 
 //Tests sur les fonctions : addEvent
@@ -202,7 +206,7 @@ public class EvenementTest {
             assertTrue(eventTest.idEvenement == resultat.idEvenement
                     & eventTest.dateDebut == resultat.dateDebut
                     & eventTest.dateFin == resultat.dateFin
-                    & eventTest.nom == resultat.nom );
+                    & eventTest.nom.equals(resultat.nom) );
         }
     }
     @Test
