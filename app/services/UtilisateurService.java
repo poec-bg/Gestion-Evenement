@@ -121,7 +121,7 @@ public class UtilisateurService {
 
       //modifier utilisateur
 
-    public void updateUtilisateur(Utilisateur utilisateur, String nom, String prenom) throws InvalidArgumentException {
+    public Utilisateur updateUtilisateur(Utilisateur utilisateur, String nom, String prenom) throws InvalidArgumentException {
 
         List<String> validationMessages = new ArrayList<>();
         if (utilisateur == null) {
@@ -136,6 +136,7 @@ public class UtilisateurService {
         if (utilisateur.prenom != prenom) {
             utilisateur.prenom = prenom;
         }
+        return utilisateur;
     }
 
     // Enregistrer les modifications
