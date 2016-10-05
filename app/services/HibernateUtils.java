@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 public class HibernateUtils {
-	private static final SessionFactory sessionFactory;
+	private static SessionFactory sessionFactory;
 	
 	//Créé une unique instance de l'objet
 	static{
@@ -14,6 +14,16 @@ public class HibernateUtils {
 			sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
 		}catch(HibernateException e){
 			throw new RuntimeException("Problème de configuration hybernate : " + e.getMessage(), e);
+		}
+	}
+
+	public static void HibernateTest() {
+		try {
+			sessionFactory = new AnnotationConfiguration().configure()
+					.setProperty("hibernate.connection.url", "jdbc:mysql://10.0.0.174:3306/calendarTest")
+					.buildSessionFactory();
+		} catch (HibernateException ex) {
+			throw new RuntimeException("Probl?e de configuration : " + ex.getMessage(), ex);
 		}
 	}
 	
