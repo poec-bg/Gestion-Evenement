@@ -83,7 +83,7 @@ public class UtilisateurService {
         Session session = HibernateUtils.getSession();
 
 
-            List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur  ").list();
+            List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur").list();
             for (Iterator iterator =
                  utilisateurs.iterator(); iterator.hasNext();){
                 Utilisateur utilisateur = (Utilisateur) iterator.next();
@@ -97,7 +97,7 @@ public class UtilisateurService {
 
       // Supprimer un utilisateur
 
-    public void remove(Integer UtilisateurID){
+    public void remove(String UtilisateurID){
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -125,6 +125,13 @@ public class UtilisateurService {
 
 
     public void clear() {
-        utilisateurs = new ArrayList<>();
+        Session session = HibernateUtils.getSession();
+        Transaction tx=session.beginTransaction();
+
+        //creation de la requette
+        Query q =session.createQuery("delete Utilisateur ");
+        //Exécution de la requete
+        q.executeUpdate();
+        tx.commit();
     }
 }
