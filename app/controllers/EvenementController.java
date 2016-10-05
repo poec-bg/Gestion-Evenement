@@ -3,20 +3,22 @@ package controllers;
 import models.Evenement;
 import models.Invite;
 import models.Utilisateur;
+import org.joda.time.DateTime;
 import play.Logger;
-import play.data.binding.types.DateTimeBinder;
 import play.data.validation.Required;
 import play.mvc.Controller;
 import services.EvenementService;
+import sun.util.calendar.CalendarDate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class EvenementController extends Controller{
 
-    public static void evenementList(){
+    public static void eventList(){
 
         Utilisateur user;
         user = new Utilisateur();
@@ -79,7 +81,7 @@ public class EvenementController extends Controller{
         render(evenementList);
     }
 
-    public static void evenement(Long idEvenement){
+    public static void event(Long idEvenement){
         Utilisateur user;
         user = new Utilisateur();
         user.nom = "Bomber";
@@ -155,8 +157,8 @@ public class EvenementController extends Controller{
 
         for (Evenement event : evenementList) {
             if (event.idEvenement == idEvenement){
-                Logger.debug("evenement id : " + event.idEvenement);
-                Logger.debug("evenement : " + event.nom);
+                Logger.debug("event id : " + event.idEvenement);
+                Logger.debug("event : " + event.nom);
                 Logger.debug("date de début : " + event.dateDebut);
                 render(event);
             }
@@ -170,28 +172,38 @@ public class EvenementController extends Controller{
     public static void saveEvent(@Required String nom,
                                  String description,
                                  String lieu,
-                                 @Required Date dateDebut,
-                                 String heureDebut/*,
-                                 @Required Date dateFin,
-                                 String heureFin,
-                                 @Required String idCreateur*/){
+                                 @Required String dateDebutString,
+                                 String heureDebutString,
+                                 @Required Date dateFinString,
+                                 String heureFinString,
+                                 @Required String idCreateur){
         if (validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             validation.keep(); // keep the errors for the next request
             newEvent();
         }
         try {
-            System.out.println("date debut : " + dateDebut);
-            System.out.println("heure debut : " + heureDebut);
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(dateDebut));
-            System.out.println("parse de date debut : " + date);
-//            EvenementService.get().addEvent(dateDebut, dateFin, nom, "1");
+            // String dateDebut = yyyy-MM-dd
+            // String heureDebut = HH:mm
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            if (heureDebutString == null || heureDebutString ==""){
+                heureDebutString = "00:00";
+            }
+            Date dateDebut = sdf.parse(dateDebutString + " " + heureDebutString);
+
+            if (heureFinString == null || heureFinString ==""){
+                heureFinString = "00:00";
+            }
+            Date dateFin = sdf.parse(dateDebutString + " " + heureDebutString);
+
+            //TODO ajouter un user pour la création de l'event
+//            EvenementService.get().addEvent(dateDebut, dateFin, nom, new Utilisateur user);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        EvenementController.evenementList();
+        EvenementController.eventList();
     }
 
 }

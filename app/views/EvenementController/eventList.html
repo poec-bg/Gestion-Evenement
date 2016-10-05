@@ -12,7 +12,7 @@
             <ul class="list-group">
                 <li class="list-group-item" >
                     ${event?.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event?.dateFin?.format("dd/MM/YY HH:mm")} :
-                    <a href="@{EvenementController.evenement(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
+                    <a href="@{EvenementController.event(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
                 </li>
                 *{<li class="list-group-item">${event.description}</li>}*
             </ul>
