@@ -83,17 +83,27 @@ public class EvenementService {
 
     //Update evenement
     public void updateEvent(Evenement evenement) throws Exception {
-        Session session = HibernateUtils.getSession();
-        Transaction tx = null;
-        try{
-            tx = session.beginTransaction();
-            session.update(evenement);
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            throw new Exception("HibernateException: " + e.getMessage() );
-        }finally {
-            session.close();
+        //vérifications
+        boolean estOk = true;
+        estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
+        estOk = estOk && validateIdCreateur(evenement.createur);
+        estOk = estOk && validateNom(evenement.nom);
+        if(!estOk){
+            throw new Exception("Invalide argument exception.");
+        }else {
+            //sauvegarde
+            Session session = HibernateUtils.getSession();
+            Transaction tx = null;
+            try{
+                tx = session.beginTransaction();
+                session.update(evenement);
+                tx.commit();
+            }catch (HibernateException e) {
+                if (tx!=null) tx.rollback();
+                throw new Exception("HibernateException: " + e.getMessage() );
+            }finally {
+                session.close();
+            }
         }
     }
 
