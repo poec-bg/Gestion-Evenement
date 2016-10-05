@@ -103,6 +103,7 @@ public class UtilisateurService {
         utilisateur.motDePasse=motDePasse;
         utilisateur.nom=nom;
         utilisateur.prenom=prenom;
+        utilisateur.isSupprime = false;
 
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
@@ -122,7 +123,7 @@ public class UtilisateurService {
 
       //modifier utilisateur
 
-    public Utilisateur updateUtilisateur(Utilisateur utilisateur, String nom, String prenom) throws InvalidArgumentException {
+    public void updateUtilisateur(Utilisateur utilisateur, String nom, String prenom) throws InvalidArgumentException {
 
         List<String> validationMessages = new ArrayList<>();
         if (utilisateur == null) {
@@ -137,21 +138,6 @@ public class UtilisateurService {
         if (utilisateur.prenom != prenom) {
             utilisateur.prenom = prenom;
         }
-        return utilisateur;
-    }
-
-    // Enregistrer les modifications
-
-    public void saveUpdateUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
-
-        List<String> validationMessages = new ArrayList<>();
-        if (utilisateur == null) {
-            validationMessages.add("L'utilisateur ne peut ?re null ou vide");
-        }
-        if (validationMessages.size() > 0) {
-            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
-        }
-
         Session session = HibernateUtils.getSession();
         Transaction t = session.beginTransaction();
         session.update(utilisateur);
@@ -159,13 +145,15 @@ public class UtilisateurService {
         session.close();
     }
 
+
+
       // Lister les utilisateurs
 
     public   List <Utilisateur> listUtilisateurs( ){
         Session session = HibernateUtils.getSession();
 
         List<Utilisateur> utilisateurs = new ArrayList<>();
-        Query query = session.createQuery("from Utilisateur");
+        Query query = session.createQuery("from Utilisateur where isSupprime =:false");
         utilisateurs = (List<Utilisateur>)query.list();
         System.out.println("taille user : " + utilisateurs.size());
         session.close();
