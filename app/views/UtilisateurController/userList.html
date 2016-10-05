@@ -9,8 +9,8 @@
     #{list utilisateurs, as:'user'}
         <div class="container">
             <ul class="list-group">
-                <a href="@{UtilisateurController.utilisateur(user.email)}" class="list-group-item">
-                    ${user.prenom} <strong>${user.nom}</strong>
+                <a href="@{UtilisateurController.user(user.email)}" class="list-group-item">
+                    <strong>${user.email} </strong> - ${user?.prenom} ${user?.nom}
                 </a>
 
             </ul>

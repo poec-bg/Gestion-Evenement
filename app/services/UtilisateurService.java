@@ -84,16 +84,12 @@ public class UtilisateurService {
     public   List <Utilisateur> listUtilisateurs( ){
         Session session = HibernateUtils.getSession();
 
-
-            List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur").list();
-            for (Iterator iterator =
-                 utilisateurs.iterator(); iterator.hasNext();){
-                Utilisateur utilisateur = (Utilisateur) iterator.next();
-
-            }
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        Query query = session.createQuery("from Utilisateur");
+        utilisateurs = (List<Utilisateur>)query.list();
+        System.out.println("taille user : " + utilisateurs.size());
         session.close();
         return utilisateurs;
-
     }
 
 
