@@ -6,7 +6,10 @@ import java.io.Serializable;
 @Entity
 public class Invite implements Serializable {
     @Id
+    private long numLign;
+    @Column(name = "email", nullable = false)
     public String email;
-    @Id @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idEvenement", nullable = false)
     public Evenement evenement;
 }

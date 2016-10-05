@@ -1,12 +1,8 @@
 package models;
 
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Evenement implements Serializable{
@@ -21,10 +17,7 @@ public class Evenement implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateFin;
     public String lieu;
-    @OneToMany(cascade = CascadeType.ALL)
-    public List<Invite> invites;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement", cascade= CascadeType.ALL)
+    public List<Invite> invites = new ArrayList<>();
 
-    public Evenement(){
-        invites = new ArrayList<>();
-    }
 }
