@@ -7,6 +7,6 @@ import java.io.Serializable;
 public class Invite implements Serializable {
     @Id
     public String email;
-    @Id @OneToOne @PrimaryKeyJoinColumn
+    @Id @ManyToOne
     public Evenement evenement;
 }

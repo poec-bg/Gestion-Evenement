@@ -12,7 +12,7 @@ import java.util.List;
 public class Evenement implements Serializable{
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     public long idEvenement;
-    @ManyToOne
+    @ManyToOne(optional = false)
     public Utilisateur createur;
     public String nom;
     public String description;
