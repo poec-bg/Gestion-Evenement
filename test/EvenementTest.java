@@ -5,6 +5,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import services.EvenementService;
+import services.HibernateUtils;
 import services.UtilisateurService;
 
 import java.util.Date;
@@ -18,6 +19,9 @@ public class EvenementTest {
 
     @BeforeClass
     public static void initTest(){
+        //on se place dans la bdd test
+        HibernateUtils.HibernateTest();
+
         user1 = new Utilisateur();
         user1.email = "testsEvenement@test.org";
         user1.motDePasse = "monMotDePasse";
@@ -42,8 +46,7 @@ public class EvenementTest {
 
     @AfterClass
     public static void clearTests(){
-        //TODO: à ajouter après correction de la methode UtilisateurService.remove(XXX)
-//        UtilisateurService.get().remove(user1.email);
+        UtilisateurService.get().remove(user1.email);
     }
 
 //Tests sur les fonctions : addEvent
@@ -53,6 +56,7 @@ public class EvenementTest {
             services.EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             fail();
+            return;
         }
         assertTrue(true);
     }
@@ -66,7 +70,8 @@ public class EvenementTest {
         try {
             services.EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
-            assertTrue(true);
+            assertTrue(1 == 1);
+            return;
         }
         fail();
     }
@@ -81,6 +86,7 @@ public class EvenementTest {
             services.EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
+            return;
         }
         fail();
     }
@@ -95,6 +101,7 @@ public class EvenementTest {
             services.EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
+            return;
         }
         fail();
     }
@@ -109,6 +116,7 @@ public class EvenementTest {
             services.EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
+            return;
         }
         fail();
     }
@@ -123,6 +131,7 @@ public class EvenementTest {
             services.EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
+            return;
         }
         fail();
     }
@@ -142,12 +151,6 @@ public class EvenementTest {
     }
     @Test
     public void listEvent_erreurDates(){
-        //ajout d'un élément dans la bdd pour qu'elle soit non vide.
-        try {
-            services.EvenementService.get().addEvent(evenementTest1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         DateTime debut = new DateTime().plusDays(3);
         DateTime fin = new DateTime().minusDays(1);
         List<Evenement> resultats = services.EvenementService.get().listEvent(debut.toDate(), fin.toDate());
@@ -156,11 +159,6 @@ public class EvenementTest {
 //Tests sur la fonctions : getEvent
     @Test
     public void getEvent_ok(){
-        Evenement result = services.EvenementService.get().getEvent(1);
-        assertNotNull(result);
-    }
-    @Test
-    public void getEvent_ok2(){
         Evenement recherche, resultat;
         try {
             recherche = services.EvenementService.get().addEvent(evenementTest1);
@@ -172,6 +170,7 @@ public class EvenementTest {
         resultat = services.EvenementService.get().getEvent(recherche.idEvenement);
         if(resultat == null){
             fail();
+            return;
         }
         assertEquals(recherche.idEvenement, resultat.idEvenement);
     }
@@ -226,6 +225,7 @@ public class EvenementTest {
             services.EvenementService.get().updateEvent(eventTest);
         } catch (Exception e) {
             assertTrue(true);
+            return;
         }
         fail();
     }
@@ -264,6 +264,7 @@ public class EvenementTest {
             services.EvenementService.get().deleteEvent(eventTest);
         } catch (Exception e) {
             fail();
+            return;
         }
         Evenement resultat = services.EvenementService.get().getEvent(eventTest.idEvenement);
         assertNull(resultat);
@@ -284,6 +285,7 @@ public class EvenementTest {
             services.EvenementService.get().deleteEvent(eventTest);
         } catch (Exception e) {
             assertTrue(true);
+            return;
         }
         fail();
     }
