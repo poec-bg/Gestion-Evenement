@@ -86,11 +86,10 @@ public class UtilisateurService {
 
 
             List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur").list();
-            for (Iterator iterator =
-                 utilisateurs.iterator(); iterator.hasNext();){
-                Utilisateur utilisateur = (Utilisateur) iterator.next();
-
-            }
+//            for (Iterator iterator = utilisateurs.iterator(); iterator.hasNext();){
+//                Utilisateur utilisateur = (Utilisateur) iterator.next();
+//
+//            }
         session.close();
         return utilisateurs;
 
