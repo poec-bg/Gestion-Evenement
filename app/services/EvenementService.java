@@ -65,7 +65,7 @@ public class EvenementService {
     //Lister des évènement entre les dates [debut] et [fin]
     public List<Evenement> listEvent(Date debut, Date fin){
         Session session = HibernateUtils.getSession();
-            Query query = session.createQuery("FROM Evenement WHERE dateDebut <= :dtFin AND dateFin >= :dtDebut");
+            Query query = session.createQuery("FROM Evenement WHERE dateDebut <= :dtFin AND dateFin >= :dtDebut ORDER BY dateDebut ASC");
             query.setTimestamp("dtDebut", debut);
             query.setTimestamp("dtFin", fin);
             List<Evenement> listResultats = query.list();
