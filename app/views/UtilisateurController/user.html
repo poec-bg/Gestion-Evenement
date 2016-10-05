@@ -8,10 +8,13 @@
     #{/if}
     <div class="container">
         <ul class="list-group">
-            <li class="list-group-item active">${user.prenom} <strong>${user.nom}</strong></li>
+            <li class="list-group-item active">${user?.prenom} <strong>${user?.nom}</strong></li>
+            #{if user.prenom == null && user.nom == null}
+            <li class="list-group-item active"><i>nom et prénom indisponible</i></li>
+            #{/if}
             <li class="list-group-item">email : ${user.email}</li>
             <li class="list-group-item">mdp : ${user.motDePasse}</li>
         </ul>
     </div>
-    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+    <a href="@{Application.index()}" class="btn btn-default">Accueil</a>
 </div>

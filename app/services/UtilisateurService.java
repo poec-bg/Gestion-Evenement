@@ -38,7 +38,7 @@ public class UtilisateurService {
 
     // Création d'un nouvel utilisateur: email et mots de passe requis
 
-    public Utilisateur create(String email, String motDePasse) throws Exception {
+    public Utilisateur create(String email,String nom, String prenom, String motDePasse) throws Exception {
 
 
         List<String> validationMessages = new ArrayList<>();
@@ -59,6 +59,8 @@ public class UtilisateurService {
         Utilisateur utilisateur=new Utilisateur();
         utilisateur.email = email;
         utilisateur.motDePasse=motDePasse;
+        utilisateur.nom=nom;
+        utilisateur.prenom=prenom;
 
 
 
@@ -84,15 +86,12 @@ public class UtilisateurService {
     public   List <Utilisateur> listUtilisateurs( ){
         Session session = HibernateUtils.getSession();
 
-
-            List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur").list();
-//            for (Iterator iterator = utilisateurs.iterator(); iterator.hasNext();){
-//                Utilisateur utilisateur = (Utilisateur) iterator.next();
-//
-//            }
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        Query query = session.createQuery("from Utilisateur");
+        utilisateurs = (List<Utilisateur>)query.list();
+        System.out.println("taille user : " + utilisateurs.size());
         session.close();
         return utilisateurs;
-
     }
 
 

@@ -13,11 +13,14 @@ public class UtilisateurController extends Controller{
 
 
     public static void userList() {
-        render(UtilisateurService.get().listUtilisateurs());
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        utilisateurs = UtilisateurService.get().listUtilisateurs();
+        render(utilisateurs);
     }
 
     public static void user(String email) {
-        render(UtilisateurService.get().getUtilisateurByEmail(email));
+        Utilisateur user = UtilisateurService.get().getUtilisateurByEmail(email);
+        render(user);
     }
 
     public static void newUser() {
