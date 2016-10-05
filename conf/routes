@@ -9,12 +9,12 @@ GET     /contact                                Application.contact
 GET     /apropos                                Application.apropos
 
 # Utilisateur
-GET     /utilisateurList                        UtilisateurController.utilisateurList
-GET     /utilisateur/{email}                    UtilisateurController.utilisateur
+GET     /utilisateurList                        UtilisateurController.userList
+GET     /utilisateur/{email}                    UtilisateurController.user
 
 # Evenement
-GET     /evenements                             EvenementController.evenementList
-GET     /evenement/{dateDebut}                  EvenementController.evenement
+GET     /evenements                             EvenementController.eventList
+GET     /evenement/{dateDebut}                  EvenementController.event
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

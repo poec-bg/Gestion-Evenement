@@ -3,10 +3,19 @@
 
 <div class="container">
     <h1>Application calendrier :</h1>
-    <div class="container">
-        <a class="btn btn-default" href='@{UtilisateurController.utilisateurList()}'>Voir la liste des utilisateurs</a>
+    <div class="container clearfix">
+        <a class="btn btn-primary pull-left" href="@{controllers.EvenementController.newEvent()}">
+            Créer un évenement
+        </a>
     </div>
-    <div class="container">
-        <a class="btn btn-default" href='@{EvenementController.evenementList()}'>Voir la liste des évenements</a>
+    <br>
+    <br>
+    <div class="container btn-group" >
+        <a class="btn btn-default" href='@{UtilisateurController.userList()}'>
+            Voir la liste des utilisateurs
+        </a>
+        <a class="btn btn-default" href='@{EvenementController.eventList()}'>
+            Voir la liste des évenements
+        </a>
     </div>
 </div>

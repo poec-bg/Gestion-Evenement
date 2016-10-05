@@ -8,8 +8,7 @@ import services.EvenementService;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class EvenementTest {
     EvenementService evenementService = EvenementService.get();
@@ -142,6 +141,17 @@ public class EvenementTest {
         assertTrue(resultats.size() == 0);
     }
 //Tests sur la fonctions : getEvent
-//Tests sur lA fonctions : updateEvent
-//Tests sur lA fonctions : deleteEvent
+    @Test
+    public void getEvent_ok(){
+        Evenement result = evenementService.getEvent(1);
+        assertNotNull(result);
+    }
+    @Test
+    public void getEvent_Invalide(){
+        Evenement result = evenementService.getEvent(-99);
+        assertNull(result);
+    }
+//Tests sur la fonctions : updateEvent
+
+//Tests sur la fonctions : deleteEvent
 }

@@ -4,15 +4,17 @@ import models.Evenement;
 import models.Invite;
 import models.Utilisateur;
 import play.Logger;
+import play.data.validation.Required;
 import play.mvc.Controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class EvenementController extends Controller{
 
-    public static void evenementList(){
+    public static void eventList(){
 
         Utilisateur user;
         user = new Utilisateur();
@@ -75,7 +77,7 @@ public class EvenementController extends Controller{
         render(evenementList);
     }
 
-    public static void evenement(Long idEvenement){
+    public static void event(Long idEvenement){
         Utilisateur user;
         user = new Utilisateur();
         user.nom = "Bomber";
@@ -132,17 +134,14 @@ public class EvenementController extends Controller{
         evenementList.add(event4);
 
         Invite invite1 = new Invite();
-        invite1.id = 1;
         invite1.email = user.email;
         invite1.evenement = event1;
 
         Invite invite2 = new Invite();
-        invite2.id = 1;
         invite2.email = user.email;
         invite2.evenement = event1;
 
         Invite invite3 = new Invite();
-        invite3.id = 1;
         invite3.email = user.email;
         invite3.evenement = event1;
 
@@ -154,12 +153,43 @@ public class EvenementController extends Controller{
 
         for (Evenement event : evenementList) {
             if (event.idEvenement == idEvenement){
-                Logger.debug("evenement id : " + event.idEvenement);
-                Logger.debug("evenement : " + event.nom);
+                Logger.debug("event id : " + event.idEvenement);
+                Logger.debug("event : " + event.nom);
                 Logger.debug("date de début : " + event.dateDebut);
                 render(event);
             }
         }
+    }
+
+    public static void newEvent(){
+        render();
+    }
+
+    public static void saveEvent(@Required String nom,
+                                 String description,
+                                 String lieu,
+                                 @Required Date dateDebut,
+                                 String heureDebut/*,
+                                 @Required Date dateFin,
+                                 String heureFin,
+                                 @Required String idCreateur*/){
+        if (validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            validation.keep(); // keep the errors for the next request
+            newEvent();
+        }
+        try {
+            System.out.println("date debut : " + dateDebut);
+            System.out.println("heure debut : " + heureDebut);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(dateDebut));
+            System.out.println("parse de date debut : " + date);
+//            EvenementService.get().addEvent(dateDebut, dateFin, nom, "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        EvenementController.eventList();
     }
 
 }
