@@ -5,11 +5,11 @@
     <h1>Liste des évenements :</h1>
     <div class="container">
         <ul class="list-group">
-            <li class="list-group-item active"><strong>${event.nom}</strong> - Lieu : ${event.lieu}</li>
+            <li class="list-group-item active"><strong>${event.nom}</strong> - Lieu : ${event?.lieu}</li>
             <li class="list-group-item">
                 <strong>Date - </strong>début : ${event.dateDebut} - fin : ${event.dateFin}
             </li>
-            <li class="list-group-item">${event.description}</li>
+            <li class="list-group-item">${event?.description}</li>
         #{if event.invites.size() == 0}
             <li class="list-group-item"><i>pas d'invité</i></li>
         #{/if}
@@ -19,7 +19,8 @@
                 <div class="container">
                     #{list event.invites, as:'invite'}
                         <br>
-                        <a href="@{UtilisateurController.utilisateur(invite.email)}">${invite.email}</a>
+                        <!--TODO ajouter le lien vers l'invite-->
+                        <a href="#">${invite.email}</a>
                     #{/list}
                 </div>
             </li>

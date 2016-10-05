@@ -54,7 +54,7 @@ public class EvenementTest {
     public void addEvent_OK(){
         Evenement resultat;
         try {
-            resultat = services.EvenementService.get().addEvent(evenementTest1);
+            resultat = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             fail();
             return;
@@ -71,7 +71,7 @@ public class EvenementTest {
         evenementTest.dateDebut = new DateTime().toDate();
         evenementTest.dateFin = new DateTime().minusHours(8).toDate();
         try {
-            services.EvenementService.get().addEvent(evenementTest);
+            EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(1 == 1);
             return;
@@ -86,7 +86,7 @@ public class EvenementTest {
         evenementTest.dateDebut = new DateTime().toDate();
         evenementTest.dateFin = new DateTime().minusHours(8).toDate();
         try {
-            services.EvenementService.get().addEvent(evenementTest);
+            EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
             return;
@@ -101,7 +101,7 @@ public class EvenementTest {
         evenementTest.dateDebut = new DateTime().toDate();
         evenementTest.dateFin = new DateTime().minusHours(8).toDate();
         try {
-            services.EvenementService.get().addEvent(evenementTest);
+            EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
             return;
@@ -116,7 +116,7 @@ public class EvenementTest {
         evenementTest.dateDebut = new DateTime().toDate();
         evenementTest.dateFin = new DateTime().minusHours(8).toDate();
         try {
-            services.EvenementService.get().addEvent(evenementTest);
+            EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
             return;
@@ -131,7 +131,7 @@ public class EvenementTest {
         evenementTest.dateDebut = new DateTime().toDate();
         evenementTest.dateFin = new DateTime().minusHours(8).toDate();
         try {
-            services.EvenementService.get().addEvent(evenementTest);
+            EvenementService.get().addEvent(evenementTest);
         } catch (Exception e) {
             assertTrue(true);
             return;
@@ -143,22 +143,22 @@ public class EvenementTest {
     public void listEvent_ok(){
         //ajout d'un élément dans la bdd pour qu'elle soit non vide.
         try {
-            services.EvenementService.get().addEvent(evenementTest1);
-            services.EvenementService.get().addEvent(evenementTest2);
+            EvenementService.get().addEvent(evenementTest1);
+            EvenementService.get().addEvent(evenementTest2);
         } catch (Exception e) {
             System.out.println("listEvent_ok: ajouts des events incorrect");
             return;
         }
         DateTime debut = new DateTime().minusDays(1);
         DateTime fin = new DateTime().plusDays(3);
-        List<Evenement> resultats = services.EvenementService.get().listEvent(debut.toDate(), fin.toDate());
+        List<Evenement> resultats = EvenementService.get().listEvent(debut.toDate(), fin.toDate());
         assertTrue(resultats.size() > 0);
     }
     @Test
     public void listEvent_erreurDates(){
         DateTime debut = new DateTime().plusDays(3);
         DateTime fin = new DateTime().minusDays(1);
-        List<Evenement> resultats = services.EvenementService.get().listEvent(debut.toDate(), fin.toDate());
+        List<Evenement> resultats = EvenementService.get().listEvent(debut.toDate(), fin.toDate());
         assertTrue(resultats.size() == 0);
     }
 //Tests sur la fonctions : getEvent
@@ -166,13 +166,13 @@ public class EvenementTest {
     public void getEvent_ok(){
         Evenement recherche, resultat;
         try {
-            recherche = services.EvenementService.get().addEvent(evenementTest1);
+            recherche = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             //l'initialisation a échoué, test arrêté
             e.printStackTrace();
             return;
         }
-        resultat = services.EvenementService.get().getEvent(recherche.idEvenement);
+        resultat = EvenementService.get().getEvent(recherche.idEvenement);
         if(resultat == null){
             fail();
             return;
@@ -181,7 +181,7 @@ public class EvenementTest {
     }
     @Test
     public void getEvent_Invalide(){
-        Evenement result = services.EvenementService.get().getEvent(-99);
+        Evenement result = EvenementService.get().getEvent(-99);
         assertNull(result);
     }
 //Tests sur la fonctions : updateEvent
@@ -189,7 +189,7 @@ public class EvenementTest {
     public void updateEvent_ok(){
         Evenement eventTest;
         try {
-            eventTest = services.EvenementService.get().addEvent(evenementTest1);
+            eventTest = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             //l'initialisation a échoué, test arrêté
             e.printStackTrace();
@@ -199,11 +199,11 @@ public class EvenementTest {
         eventTest.dateDebut = evenementTest2.dateDebut;
         eventTest.nom = evenementTest2.nom;
         try {
-            services.EvenementService.get().updateEvent(eventTest);
+            EvenementService.get().updateEvent(eventTest);
         } catch (Exception e) {
             fail();
         }
-        Evenement resultat = services.EvenementService.get().getEvent(eventTest.idEvenement);
+        Evenement resultat = EvenementService.get().getEvent(eventTest.idEvenement);
         if(resultat == null){
             fail();
         }else{
@@ -217,7 +217,7 @@ public class EvenementTest {
     public void updateEvent_erreurDates(){
         Evenement eventTest;
         try {
-            eventTest = services.EvenementService.get().addEvent(evenementTest1);
+            eventTest = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             //l'initialisation a échoué, test arrêté
             e.printStackTrace();
@@ -227,7 +227,7 @@ public class EvenementTest {
         eventTest.dateDebut = evenementTest2.dateFin;
         eventTest.nom = evenementTest2.nom;
         try {
-            services.EvenementService.get().updateEvent(eventTest);
+            EvenementService.get().updateEvent(eventTest);
         } catch (Exception e) {
             assertTrue(true);
             return;
@@ -238,7 +238,7 @@ public class EvenementTest {
     public void updateEvent_erreurNom(){
         Evenement eventTest;
         try {
-            eventTest = services.EvenementService.get().addEvent(evenementTest1);
+            eventTest = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             //l'initialisation a échoué, test arrêté
             e.printStackTrace();
@@ -248,7 +248,7 @@ public class EvenementTest {
         eventTest.dateDebut = evenementTest2.dateDebut;
         eventTest.nom = "";
         try {
-            services.EvenementService.get().updateEvent(eventTest);
+            EvenementService.get().updateEvent(eventTest);
         } catch (Exception e) {
             assertTrue(true);
         }
@@ -259,26 +259,26 @@ public class EvenementTest {
     public void deleteEvent_ok(){
         Evenement eventTest;
         try {
-            eventTest = services.EvenementService.get().addEvent(evenementTest1);
+            eventTest = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             //l'initialisation a échoué, test arrêté
             e.printStackTrace();
             return;
         }
         try {
-            services.EvenementService.get().deleteEvent(eventTest);
+            EvenementService.get().deleteEvent(eventTest);
         } catch (Exception e) {
             fail();
             return;
         }
-        Evenement resultat = services.EvenementService.get().getEvent(eventTest.idEvenement);
+        Evenement resultat = EvenementService.get().getEvent(eventTest.idEvenement);
         assertNull(resultat);
     }
     @Test
     public void deleteEvent_idInvalide(){
         Evenement eventTest;
         try {
-            eventTest = services.EvenementService.get().addEvent(evenementTest1);
+            eventTest = EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             //l'initialisation a échoué, test arrêté
             e.printStackTrace();
@@ -287,7 +287,7 @@ public class EvenementTest {
         eventTest.idEvenement = -99;
 
         try {
-            services.EvenementService.get().deleteEvent(eventTest);
+            EvenementService.get().deleteEvent(eventTest);
         } catch (Exception e) {
             assertTrue(true);
             return;
