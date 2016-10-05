@@ -1,15 +1,29 @@
 package models.types;
 
 public enum Categorie {
-    RED("red"), BLACK("black"), BLUE("blue"), CYAN("cyan"), GREEN("green"), MAGENTA("mengenta");
+    RED("red", "rouge"),
+    BLACK("black", "noir"),
+    BLUE("blue", "bleu"),
+    CYAN("cyan", "cyan"),
+    GREEN("green", "vert"),
+    MAGENTA("magenta", "magenta");
 
-    private String label;
+    private String labelEN, labelFR;
 
-    Categorie(String label) {
-        this.label = label;
+    Categorie(String labelEN, String labelFR) {
+        this.labelEN = labelEN;
+        this.labelFR = labelFR;
     }
 
     public String getLabel() {
-        return label;
+        return labelEN;
+    }
+
+    public String getLabelEN() {
+        return labelEN;
+    }
+
+    public String getLabelFR() {
+        return labelFR;
     }
 }
