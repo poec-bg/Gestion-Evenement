@@ -60,6 +60,7 @@ public class UtilisateurService {
         Utilisateur utilisateur=new Utilisateur();
         utilisateur.email = email;
         utilisateur.motDePasse=motDePasse;
+        utilisateur.isSupprime = false;
 
 
         Session session = HibernateUtils.getSession();
@@ -79,7 +80,7 @@ public class UtilisateurService {
     }
 
 
-    public Utilisateur createUtilisateur(String email,String nom, String prenom, String motDePasse) throws Exception {
+    public Utilisateur create(String email, String motDePasse, String nom, String prenom) throws Exception {
 
 
         List<String> validationMessages = new ArrayList<>();
@@ -179,6 +180,18 @@ public class UtilisateurService {
         Utilisateur utilisateur=(Utilisateur) session.get(Utilisateur.class, email);
         return utilisateur;
 
+    }
+
+    public void deleteUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
+        if (utilisateur == null) {
+            throw new InvalidArgumentException(new String[] { "L'utilisateur ne peut ?re null" });
+        }
+        utilisateur.isSupprime = true;
+        Session session = HibernateUtils.getSession();
+        Transaction t = session.beginTransaction();
+        session.update(utilisateur);
+        t.commit();
+        session.close();
     }
 
 
