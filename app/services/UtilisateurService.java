@@ -3,9 +3,7 @@ package services;
 
 import exceptions.InvalidArgumentException;
 import models.Utilisateur;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import validators.EmailValidator;
 
 import java.util.ArrayList;
@@ -42,6 +40,7 @@ public class UtilisateurService {
 
     public Utilisateur create(String email, String motDePasse) throws Exception {
 
+
         List<String> validationMessages = new ArrayList<>();
         if (email == null || email.equals("")) {
             validationMessages.add("Le email ne peut être null ou vide");
@@ -61,6 +60,7 @@ public class UtilisateurService {
         utilisateur.email = email;
         utilisateur.motDePasse=motDePasse;
 
+
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -69,7 +69,7 @@ public class UtilisateurService {
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
-            throw new Exception("HibernateException: " + e.getMessage() );
+            throw new Exception("HibernateException:  " + e.getMessage() );
         }finally {
             session.close();
         }
@@ -111,6 +111,15 @@ public class UtilisateurService {
         }finally {
             session.close();
         }
+    }
+
+    //Récuperer un utilisateur par son email
+
+    public Utilisateur getUtilisateurByEmail(String email){
+        Session session = HibernateUtils.getSession();
+        Utilisateur utilisateur=(Utilisateur) session.get("Utilisateur", email);
+        return utilisateur;
+
     }
 
 
