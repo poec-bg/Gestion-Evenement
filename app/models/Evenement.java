@@ -21,7 +21,7 @@ public class Evenement implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateFin;
     public String lieu;
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Invite> invites;
 
     public Evenement(){

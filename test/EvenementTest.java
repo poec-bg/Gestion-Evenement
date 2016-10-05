@@ -46,19 +46,22 @@ public class EvenementTest {
 
     @AfterClass
     public static void clearTests(){
-        UtilisateurService.get().remove(user1.email);
+//        UtilisateurService.get().remove(user1.email);
     }
 
 //Tests sur les fonctions : addEvent
     @Test
     public void addEvent_OK(){
+        Evenement resultat;
         try {
-            services.EvenementService.get().addEvent(evenementTest1);
+            resultat = services.EvenementService.get().addEvent(evenementTest1);
         } catch (Exception e) {
             fail();
             return;
         }
-        assertTrue(true);
+        assertTrue( resultat.nom.equals(evenementTest1.nom)
+                & resultat.dateDebut == evenementTest1.dateDebut
+                & resultat.dateFin == evenementTest1.dateFin );
     }
     @Test
     public void addEvent_DebutApresFin(){
