@@ -1,0 +1,49 @@
+#{extends 'main.html' /}
+#{set title:'Calendar - Nouvel utilisateur' /}
+
+<div class="container">
+    <h1>Création d'un compte utilisateur :</h1>
+    <div class="container clearfix">
+    #{ifErrors}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Erreur lors de la création du compte !<br>
+            Verifiez que tous les champs soient correctement remplis
+        </div>
+    #{/ifErrors}
+        <form action="@{UtilisateurController.saveUser()}" method="post">
+            <h2>détail du compte :</h2>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Nom</span>
+                <input class="form-control" type="text" name="nom" value="nom">
+                <span class="error">#{error 'nom' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">prenom</span>
+                <input class="form-control" type="text" name="prenom" value="prenom">
+                <span class="error">#{error 'prenom' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Email</span>
+                <input class="form-control" type="email" name="email" value="email@email.com">
+                <span class="error">#{error 'email' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">Mot de passe</span>
+                <input class="form-control" type="password" name="motDePasse">
+                <span class="error">#{error 'motDePasse' /}</span>
+            </div>
+
+            <div class="pull-left input-group">
+                <input class="btn btn-primary" type="submit" value="Créer">
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-warning" href="javascript:history.back()">Annuler</a>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+</div>

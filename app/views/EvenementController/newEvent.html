@@ -1,8 +1,8 @@
 #{extends 'main.html' /}
-#{set title:'Calendar - Liste des évenements' /}
+#{set title:'Calendar - Créer un évenement' /}
 
 <div class="container">
-    <h1>Liste des évenements :</h1>
+    <h1>Nouvel évenement :</h1>
     <div class="container clearfix">
     #{ifErrors}
         <div class="alert alert-danger" role="alert">
@@ -13,7 +13,7 @@
         </div>
     #{/ifErrors}
         <form action="@{EvenementController.saveEvent()}" method="post">
-            <h2>Créer un évenement :</h2>
+            <h2>paramètres :</h2>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Nom</span>
                 <input class="form-control" type="text" name="nom" value="nom">
