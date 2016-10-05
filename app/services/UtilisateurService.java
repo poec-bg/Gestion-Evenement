@@ -3,6 +3,7 @@ package services;
 
 import exceptions.InvalidArgumentException;
 import models.Utilisateur;
+import org.bouncycastle.util.Strings;
 import org.hibernate.*;
 import validators.EmailValidator;
 
@@ -38,7 +39,47 @@ public class UtilisateurService {
 
     // Création d'un nouvel utilisateur: email et mots de passe requis
 
-    public Utilisateur create(String email,String nom, String prenom, String motDePasse) throws Exception {
+    public Utilisateur create(String email, String motDePasse) throws Exception {
+
+
+        List<String> validationMessages = new ArrayList<>();
+        if (email == null || email.equals("")) {
+            validationMessages.add("Le email ne peut être null ou vide");
+        } else {
+            if (!EmailValidator.validate(email)) {
+                validationMessages.add("Le format de l'email est invalide");
+            }
+        }
+        if (motDePasse == null || motDePasse.equals("")) {
+            validationMessages.add("Le motDePasse ne peut être null ou vide");
+        }
+        if (validationMessages.size() > 0) {
+            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
+        }
+
+        Utilisateur utilisateur=new Utilisateur();
+        utilisateur.email = email;
+        utilisateur.motDePasse=motDePasse;
+
+
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.save(utilisateur);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            throw new Exception("HibernateException:  " + e.getMessage() );
+        }finally {
+            session.close();
+        }
+        return utilisateur;
+
+    }
+
+
+    public Utilisateur createUtilisateur(String email,String nom, String prenom, String motDePasse) throws Exception {
 
 
         List<String> validationMessages = new ArrayList<>();
@@ -62,9 +103,6 @@ public class UtilisateurService {
         utilisateur.nom=nom;
         utilisateur.prenom=prenom;
 
-
-
-
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -81,6 +119,44 @@ public class UtilisateurService {
 
     }
 
+      //modifier utilisateur
+
+    public void updateUtilisateur(Utilisateur utilisateur, String nom, String prenom) throws InvalidArgumentException {
+
+        List<String> validationMessages = new ArrayList<>();
+        if (utilisateur == null) {
+            validationMessages.add("L'utilisateur ne peut être null");
+        }
+        if (validationMessages.size() > 0) {
+            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
+        }
+        if (utilisateur.nom != nom) {
+            utilisateur.nom = nom;
+        }
+        if (utilisateur.prenom != prenom) {
+            utilisateur.prenom = prenom;
+        }
+    }
+
+    // Enregistrer les modifications
+
+    public void saveUpdateUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
+
+        List<String> validationMessages = new ArrayList<>();
+        if (utilisateur == null) {
+            validationMessages.add("L'utilisateur ne peut ?re null ou vide");
+        }
+        if (validationMessages.size() > 0) {
+            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
+        }
+
+        Session session = HibernateUtils.getSession();
+        Transaction t = session.beginTransaction();
+        session.update(utilisateur);
+        t.commit();
+        session.close();
+    }
+
       // Lister les utilisateurs
 
     public   List <Utilisateur> listUtilisateurs( ){
@@ -92,25 +168,6 @@ public class UtilisateurService {
         System.out.println("taille user : " + utilisateurs.size());
         session.close();
         return utilisateurs;
-    }
-
-
-      // Supprimer un utilisateur
-
-    public void remove(String UtilisateurID){
-        Session session = HibernateUtils.getSession();
-        Transaction tx = null;
-        try{
-            tx = session.beginTransaction();
-            Utilisateur utilisateur = (Utilisateur)session.get(Utilisateur.class, UtilisateurID);
-            session.delete(utilisateur);
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
     }
 
 
