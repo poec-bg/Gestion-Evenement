@@ -1,5 +1,7 @@
 package models;
 
+import models.types.Categorie;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -19,5 +21,6 @@ public class Evenement implements Serializable{
     public String lieu;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement", cascade= CascadeType.ALL)
     public List<Invite> invites = new ArrayList<>();
-
+    @Enumerated(EnumType.STRING)
+    public Categorie categorie;
 }

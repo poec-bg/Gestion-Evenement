@@ -152,6 +152,9 @@ public class EvenementTest {
         DateTime debut = new DateTime().minusDays(1);
         DateTime fin = new DateTime().plusDays(3);
         List<Evenement> resultats = EvenementService.get().listEvent(debut.toDate(), fin.toDate());
+        for(Evenement eventI : resultats) {
+            System.out.println(eventI.nom + " [" + eventI.dateDebut + " au " + eventI.dateFin + " ] par " + eventI.createur.email);
+        }
         assertTrue(resultats.size() > 0);
     }
     @Test
