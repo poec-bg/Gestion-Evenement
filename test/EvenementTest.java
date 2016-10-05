@@ -144,8 +144,10 @@ public class EvenementTest {
         //ajout d'un élément dans la bdd pour qu'elle soit non vide.
         try {
             services.EvenementService.get().addEvent(evenementTest1);
+            services.EvenementService.get().addEvent(evenementTest2);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("listEvent_ok: ajouts des events incorrect");
+            return;
         }
         DateTime debut = new DateTime().minusDays(1);
         DateTime fin = new DateTime().plusDays(3);
