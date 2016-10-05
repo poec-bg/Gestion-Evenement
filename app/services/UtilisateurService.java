@@ -61,6 +61,8 @@ public class UtilisateurService {
         utilisateur.motDePasse=motDePasse;
 
 
+
+
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -84,11 +86,10 @@ public class UtilisateurService {
 
 
             List<Utilisateur> utilisateurs = session.createQuery("FROM Utilisateur").list();
-            for (Iterator iterator =
-                 utilisateurs.iterator(); iterator.hasNext();){
-                Utilisateur utilisateur = (Utilisateur) iterator.next();
-
-            }
+//            for (Iterator iterator = utilisateurs.iterator(); iterator.hasNext();){
+//                Utilisateur utilisateur = (Utilisateur) iterator.next();
+//
+//            }
         session.close();
         return utilisateurs;
 
@@ -102,8 +103,7 @@ public class UtilisateurService {
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            Utilisateur utilisateur =
-                    (Utilisateur)session.get(Utilisateur.class, UtilisateurID);
+            Utilisateur utilisateur = (Utilisateur)session.get(Utilisateur.class, UtilisateurID);
             session.delete(utilisateur);
             tx.commit();
         }catch (HibernateException e) {
@@ -114,11 +114,12 @@ public class UtilisateurService {
         }
     }
 
+
     //Récuperer un utilisateur par son email
 
     public Utilisateur getUtilisateurByEmail(String email){
         Session session = HibernateUtils.getSession();
-        Utilisateur utilisateur=(Utilisateur) session.get("Utilisateur", email);
+        Utilisateur utilisateur=(Utilisateur) session.get(Utilisateur.class, email);
         return utilisateur;
 
     }

@@ -10,6 +10,7 @@ import play.mvc.Controller;
 import services.EvenementService;
 import sun.util.calendar.CalendarDate;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,65 +21,78 @@ public class EvenementController extends Controller{
 
     public static void eventList(){
 
-        Utilisateur user;
-        user = new Utilisateur();
-        user.nom = "Bomber";
-        user.prenom = "jean";
-        user.email = "jean@bomber.com";
-        user.motDePasse = "yolo1";
+//        Utilisateur user;
+//        user = new Utilisateur();
+//        user.nom = "Bomber";
+//        user.prenom = "jean";
+//        user.email = "jean@bomber.com";
+//        user.motDePasse = "yolo1";
+//
+//        Evenement event1;
+//        Evenement event2;
+//        Evenement event3;
+//        Evenement event4;
+//
+//        event1 = new Evenement();
+//        event1.idEvenement = 1;
+//        event1.createur = user;
+//        event1.dateDebut = new Date(2016, 10, 4, 12, 30);
+//        event1.dateFin = new Date(21016, 10, 4, 14, 0);
+//        event1.nom = "RDV 1";
+//        event1.description = "c'est super important !";
+//        event1.lieu = "McDo";
+//
+//        event2 = new Evenement();
+//        event1.idEvenement = 2;
+//        event2.createur = user;
+//        event2.dateDebut = new Date(2016, 10, 5, 9, 0);
+//        event2.dateFin = new Date(21016, 10, 5, 18, 0);
+//        event2.nom = "super RDV";
+//        event2.description = "c'est pas important";
+//        event2.lieu = "m2i";
+//
+//        event3 = new Evenement();
+//        event1.idEvenement = 3;
+//        event3.createur = user;
+//        event3.dateDebut = new Date(2016, 10, 6, 17, 0);
+//        event3.dateFin = new Date(21016, 10, 6, 18, 0);
+//        event3.nom = "un évenement tou ce qu'il y a de plus normal";
+//        event3.description = "ceci est une description d'évenement";
+//        event3.lieu = "osef";
+//
+//        event4 = new Evenement();
+//        event1.idEvenement = 4;
+//        event4.createur = user;
+//        event4.dateDebut = new Date(2016, 10, 5, 10, 0);
+//        event4.dateFin = new Date(21016, 10, 5, 11, 30);
+//        event4.nom = "RDV 4";
+//        event4.description = "wahou quelle prouesse technologique";
+//        event4.lieu = "là bas";
 
-        Evenement event1;
-        Evenement event2;
-        Evenement event3;
-        Evenement event4;
-
-        event1 = new Evenement();
-        event1.idEvenement = 1;
-        event1.createur = user;
-        event1.dateDebut = new Date(2016, 10, 4, 12, 30);
-        event1.dateFin = new Date(21016, 10, 4, 14, 0);
-        event1.nom = "RDV 1";
-        event1.description = "c'est super important !";
-        event1.lieu = "McDo";
-
-        event2 = new Evenement();
-        event1.idEvenement = 2;
-        event2.createur = user;
-        event2.dateDebut = new Date(2016, 10, 5, 9, 0);
-        event2.dateFin = new Date(21016, 10, 5, 18, 0);
-        event2.nom = "super RDV";
-        event2.description = "c'est pas important";
-        event2.lieu = "m2i";
-
-        event3 = new Evenement();
-        event1.idEvenement = 3;
-        event3.createur = user;
-        event3.dateDebut = new Date(2016, 10, 6, 17, 0);
-        event3.dateFin = new Date(21016, 10, 6, 18, 0);
-        event3.nom = "un évenement tou ce qu'il y a de plus normal";
-        event3.description = "ceci est une description d'évenement";
-        event3.lieu = "osef";
-
-        event4 = new Evenement();
-        event1.idEvenement = 4;
-        event4.createur = user;
-        event4.dateDebut = new Date(2016, 10, 5, 10, 0);
-        event4.dateFin = new Date(21016, 10, 5, 11, 30);
-        event4.nom = "RDV 4";
-        event4.description = "wahou quelle prouesse technologique";
-        event4.lieu = "là bas";
 //        SimpleDateFormat sformat = new SimpleDateFormat("dd/mm/yyyy - HH:mm");
 //        sformat.format(event1.dateDebut);
 //        event1.dateFin.format();
 
-        List<Evenement> evenementList;
-        evenementList = new ArrayList<>();
-        evenementList.add(event1);
-        evenementList.add(event2);
-        evenementList.add(event3);
-        evenementList.add(event4);
+//        List<Evenement> evenementList;
+//        evenementList = new ArrayList<>();
+//        evenementList.add(event1);
+//        evenementList.add(event2);
+//        evenementList.add(event3);
+//        evenementList.add(event4);
 
-        render(evenementList);
+        String date1 = "2016-10-05 01:01";
+        String date2 = "2016-12-31 23:59";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        List<Evenement> evenementList;
+
+        try {
+            Date dateDebut = sdf.parse(date1);
+            Date dateFin = sdf.parse(date2);
+            evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
+            render(evenementList);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void event(Long idEvenement){
@@ -173,31 +187,33 @@ public class EvenementController extends Controller{
                                  String description,
                                  String lieu,
                                  @Required String dateDebutString,
-                                 String heureDebutString,
+                                 String heureDebut,
                                  @Required Date dateFinString,
-                                 String heureFinString,
-                                 @Required String idCreateur){
+                                 String heureFin){
         if (validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             validation.keep(); // keep the errors for the next request
             newEvent();
         }
+
         try {
             // String dateDebut = yyyy-MM-dd
             // String heureDebut = HH:mm
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            if (heureDebutString == null || heureDebutString ==""){
-                heureDebutString = "00:00";
+            if (heureDebut == null || heureDebut == ""){
+                heureDebut = "00:00";
             }
-            Date dateDebut = sdf.parse(dateDebutString + " " + heureDebutString);
+            Date dateDebut = sdf.parse(dateDebutString + " " + heureDebut);
 
-            if (heureFinString == null || heureFinString ==""){
-                heureFinString = "00:00";
+            if (heureFin == null || heureFin == ""){
+                heureFin = "00:00";
             }
-            Date dateFin = sdf.parse(dateDebutString + " " + heureDebutString);
+            Date dateFin = sdf.parse(dateFinString + " " + heureFin);
 
-            //TODO ajouter un user pour la création de l'event
-//            EvenementService.get().addEvent(dateDebut, dateFin, nom, new Utilisateur user);
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.email = "test@email.com";
+            utilisateur.motDePasse = "test";
+            EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
         } catch (Exception e) {
             e.printStackTrace();
         }
