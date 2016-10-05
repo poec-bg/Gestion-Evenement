@@ -98,7 +98,7 @@ public class EvenementService {
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
-        estOk = estOk && validateIdCreateur(evenement.createur);
+//        estOk = estOk && validateIdCreateur(evenement.createur);
         estOk = estOk && validateNom(evenement.nom);
         if(!estOk){
             throw new Exception("Invalide argument exception.");

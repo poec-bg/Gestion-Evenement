@@ -109,4 +109,46 @@ public class EvenementController extends Controller{
         EvenementController.eventList();
     }
 
+    public static void saveModificatedEvent(@Required String nom,
+                                 String description,
+                                 String lieu,
+                                 @Required String dateDebutString,
+                                 String heureDebut,
+                                 @Required String dateFinString,
+                                 String heureFin) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            if (heureDebut == null || heureDebut.length() == 0){
+                heureDebut = "00:00";
+                System.out.println("heure debut mod : " + heureDebut);
+            }
+            System.out.println("date{"+dateDebutString+"} heure{"+heureDebut+"}");
+            Date dateDebut = sdf.parse("" + dateDebutString + " " + heureDebut + "");
+
+            if (heureFin == null || heureFin.length() == 0){
+                heureFin = "23:59";
+                System.out.println("heure fin mod : " + heureFin);
+            }
+            Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
+
+            Evenement event = new Evenement();
+            event.nom = nom;
+            event.description = description;
+            event.lieu = lieu;
+            event.dateDebut = dateDebut;
+            event.dateFin = dateFin;
+
+            EvenementService.get().updateEvent(event);
+            EvenementController.event(event.idEvenement);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateEvent(long idEvenement) {
+        Evenement event = EvenementService.get().getEvent(idEvenement);
+        render(event);
+    }
+
 }
