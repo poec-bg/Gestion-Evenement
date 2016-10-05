@@ -1,9 +1,11 @@
 import models.Evenement;
 import models.Utilisateur;
 import org.joda.time.DateTime;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import services.EvenementService;
+import services.UtilisateurService;
 
 import java.util.Date;
 import java.util.List;
@@ -18,8 +20,14 @@ public class EvenementTest {
     public static void initTest(){
         user1 = new Utilisateur();
         user1.email = "test@test.org";
+        user1.motDePasse = "monMotDePasse";
         user1.nom = "TEST";
         user1.prenom = "Mon Super";
+        try {
+            //UtilisateurService.get().create(user1.email, user1.motDePasse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         evenementTest1 = new Evenement();
         evenementTest1.nom = "TEST 1";
