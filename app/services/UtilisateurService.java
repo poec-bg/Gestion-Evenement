@@ -96,6 +96,7 @@ public class UtilisateurService {
 
 
       // Supprimer un utilisateur
+
     public void remove(Integer UtilisateurID){
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
