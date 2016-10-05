@@ -37,6 +37,7 @@ public class BasicTest extends UnitTest {
 
     @Test
     public void hybernateSaveUtilisateur(){
+        HibernateUtils.HibernateTest();
         String idResultat = "";
         Utilisateur user = new Utilisateur();
         user.email = "test@test.fr";

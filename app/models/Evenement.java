@@ -12,7 +12,7 @@ import java.util.List;
 public class Evenement implements Serializable{
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     public long idEvenement;
-    @ManyToOne
+    @ManyToOne(optional = false, cascade= CascadeType.ALL)
     public Utilisateur createur;
     public String nom;
     public String description;
@@ -21,7 +21,7 @@ public class Evenement implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateFin;
     public String lieu;
-    @OneToMany(cascade= CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Invite> invites;
 
     public Evenement(){

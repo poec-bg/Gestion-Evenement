@@ -6,6 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import services.UtilisateurService;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -15,7 +17,7 @@ import static org.junit.Assert.fail;
  */
 public class UtilisateurServiceTest {
 
-    Utilisateur utilisateur;
+   Utilisateur utilisateur;
 
     @BeforeClass
     public static void avantClass() {
@@ -33,7 +35,7 @@ public class UtilisateurServiceTest {
     public void avantToutTest() {
        UtilisateurService.get().clear();
         try {
-            utilisateur = UtilisateurService.get().create("luke.skywalker@gmail.com", "iamyourfather");
+            utilisateur = UtilisateurService.get().create("luke.skywalker@hotmail.com", "iamyourfather");
 
         } catch (Exception e) {
             fail();
@@ -111,4 +113,35 @@ public class UtilisateurServiceTest {
             fail();
         }
     }
+
+    @Test
+    public void testLister_twoUtilisateur() throws Exception {
+        // Given
+        // enregistrer un premier Client
+        Utilisateur utilisateur1 = UtilisateurService.get().create("yan.tot@msn.com", "azerty");
+        // enregistrer un deuxième Client
+       Utilisateur utilisateur2 = UtilisateurService.get().create("han.solo@gmail.com", "0123456789");
+
+
+        // When
+        List<Utilisateur>utilisateurs = UtilisateurService.get().listUtilisateurs();
+
+        // Then
+        assertEquals(3, utilisateurs.size());
+    }
+
+    @Test
+    public void testRemove_utilisateurOk() {
+        // Given
+
+        // When
+
+
+            // Then
+
+
+
+    }
+
+
 }

@@ -1,8 +1,10 @@
 package services;
 
+import models.Utilisateur;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 public class HibernateUtils {
@@ -30,5 +32,20 @@ public class HibernateUtils {
 	//Renvoie la session Hibernate
 	public static Session getSession() throws HibernateException{
 		return sessionFactory.openSession();
+	}
+
+	//Initilisation de la base de données
+	public static void initBdd(){
+		Session session = getSession();
+		Transaction tx = null;
+		try{
+			tx = session.beginTransaction();
+				session.save( new Utilisateur() );
+			tx.commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
 	}
 }
