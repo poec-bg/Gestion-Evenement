@@ -153,7 +153,9 @@ public class UtilisateurService {
         Session session = HibernateUtils.getSession();
 
         List<Utilisateur> utilisateurs = new ArrayList<>();
-        Query query = session.createQuery("from Utilisateur where isSupprime =:false");
+        Boolean isSupprime =false;
+        Query query = session.createQuery("from Utilisateur where isSupprime =:isSupprime");
+        query.setBoolean("isSupprime", isSupprime);
         utilisateurs = (List<Utilisateur>)query.list();
         System.out.println("taille user : " + utilisateurs.size());
         session.close();
