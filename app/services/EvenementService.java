@@ -65,10 +65,10 @@ public class EvenementService {
     //Lister des évènement entre les dates [debut] et [fin]
     public List<Evenement> listEvent(Date debut, Date fin){
         Session session = HibernateUtils.getSession();
-        List<Evenement> listResultats = session.createQuery("FROM Evenement WHERE dateDebut > :dtFin AND dateFin < :dtDebut")
-                .setDate("dtDebut", debut)
-                .setDate("dtFin", fin)
-                .list();
+            Query query = session.createQuery("FROM Evenement WHERE dateDebut <= :dtFin AND dateFin >= :dtDebut");
+            query.setTimestamp("dtDebut", debut);
+            query.setTimestamp("dtFin", fin);
+            List<Evenement> listResultats = query.list();
         session.close();
         return listResultats;
     }
@@ -76,7 +76,7 @@ public class EvenementService {
     //Récupération d'un évènement par son ID
     public Evenement getEvent(long id){
         Session session = HibernateUtils.getSession();
-            Evenement resultat = (Evenement) session.get("Evenement", id);
+            Evenement resultat = (Evenement) session.get(Evenement.class, id);
         session.close();
         return resultat;
     }
@@ -113,7 +113,7 @@ public class EvenementService {
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            session.delete(evenement);
+                session.delete(evenement);
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
