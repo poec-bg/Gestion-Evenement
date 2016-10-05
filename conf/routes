@@ -11,6 +11,7 @@ GET     /apropos                                Application.apropos
 # Utilisateur
 GET     /utilisateurList                        UtilisateurController.userList
 GET     /utilisateur/{email}                    UtilisateurController.user
+GET     /nouveaucompte                          UtilisateurController.newUser
 
 # Evenement
 GET     /evenements                             EvenementController.eventList
