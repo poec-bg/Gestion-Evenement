@@ -8,7 +8,8 @@
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
-            Erreur lors de la création du compte !
+            Erreur lors de la création de l'évenement !<br>
+            Verifiez que tous les champs soient correctement remplis
         </div>
     #{/ifErrors}
         <form action="@{EvenementController.saveEvent()}" method="post">
