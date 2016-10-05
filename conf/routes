@@ -15,7 +15,7 @@ GET     /nouveaucompte                          UtilisateurController.newUser
 
 # Evenement
 GET     /evenements                             EvenementController.eventList
-GET     /evenement/{dateDebut}                  EvenementController.event
+GET     /evenement/{idEvenement}                EvenementController.event
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
