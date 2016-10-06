@@ -7,7 +7,7 @@
     <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="@{'/public/stylesheets/sticky-footer-navbar.css'}">
-    #{get 'moreStyles' /}
+#{get 'moreStyles' /}
     <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 </head>
 
@@ -37,15 +37,19 @@
                         <a href="@{Application.contact()}">Contact</a>
                     </li>
                 </ul>
+
+                <div class="container cleafix">
+                    <div class="pull-right">
+                        <p></p>
+                        #{if controllers.secure.Security.isConnected()}
+                            <a href="@{secure.Secure.logout()}" class="btn btn-warning"><span class="glyphicon glyphicon-log-out"/></a>
+                        #{/if}
+                        #{else}
+                            <a href="@{secure.Secure.login()}" class="btn btn-primary"><span class="glyphicon glyphicon-log-in"/></a>
+                        #{/else}
+                    </div>
+                </div>
             </div>
-
-        #{if controllers.secure.Security.isConnected()}
-            <li><a href="@{secure.Secure.logout()}">Se déconnecter</a></li>
-        #{/if}
-        #{else}
-            <li><a href="@{secure.Secure.login()}">Se connecter</a></li>
-        #{/else}
-
         </div>
     </nav>
 </header>
