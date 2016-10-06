@@ -1,27 +1,28 @@
 package controllers;
 
+import controllers.secure.Check;
+import controllers.secure.Secure;
 import models.Evenement;
 import models.Invite;
 import models.Utilisateur;
+import models.types.Categorie;
 import org.joda.time.DateTime;
-import play.Logger;
 import play.data.validation.Required;
 import play.mvc.Controller;
+import play.mvc.With;
 import services.EvenementService;
 import services.UtilisateurService;
-import sun.util.calendar.CalendarDate;
 
-import java.sql.Time;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@With(Secure.class)
+@Check({"ADMIN", "USER"})
 public class EvenementController extends Controller{
 
-    public static void eventList(){
+    public static void findEvents(){
         Date dateDebut = new Date();
         Date dateFin = new Date();
         DateTime dtFin = new DateTime(dateDebut);
@@ -34,23 +35,21 @@ public class EvenementController extends Controller{
         render(evenementList, dateDebut, dateFin);
     }
 
-    public static void eventListDate(Date dateDebut, Date dateFin){
-
-//        Date dateDebut = null;
-//        Date dateFin = null;
-//        try {
-//            dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(dateDebutString);
-//            dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(dateFinString);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+    public static void findEventsByDate(Date dateDebut, Date dateFin){
         List<Evenement> evenementList;
 
         evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
-        renderTemplate("EvenementController/eventList.html", evenementList, dateDebut, dateFin);
+        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin);
     }
 
-    public static void event(Long idEvenement){
+    public static void findEventsByCategorie(Date dateDebut, Date dateFin, Categorie categorie){
+        List<Evenement> evenementList;
+
+        evenementList = EvenementService.get().listEvent(dateDebut, dateFin, categorie);
+        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin, categorie);
+    }
+
+    public static void getEvent(Long idEvenement){
         Evenement event = EvenementService.get().getEvent(idEvenement);
 
         //TODO enlever les invites fait a la mano quand le model sera fonctionnel
@@ -95,8 +94,9 @@ public class EvenementController extends Controller{
         try {
             // String dateDebut = yyyy-MM-dd
             // String heureDebut = HH:mm
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            Evenement event;
 
             if (heureDebut == null || heureDebut.length() == 0){
                 heureDebut = "00:00";
@@ -114,13 +114,13 @@ public class EvenementController extends Controller{
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.email = "test@email.com";
             utilisateur.motDePasse = "test";
-            EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
+            event = EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
+            EvenementController.getEvent(event.idEvenement);
         } catch (Exception e) {
+            //TODO renvoyer sur une page erreur ou recommencer l'opération
             e.printStackTrace();
         }
 
-
-        EvenementController.eventList();
     }
 
 
@@ -171,7 +171,7 @@ public class EvenementController extends Controller{
 
 
             EvenementService.get().updateEvent(event);
-            EvenementController.event(event.idEvenement);
+            EvenementController.getEvent(event.idEvenement);
         } catch (Exception e) {
             e.printStackTrace();
         }

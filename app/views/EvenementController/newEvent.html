@@ -52,11 +52,11 @@
                 <input class="btn btn-primary" type="submit" value="Créer">
             </div>
             <div class="pull-right">
-                <a class="btn btn-warning" href="javascript:history.back()">Annuler</a>
+                <a class="btn btn-warning" href="@{EvenementController.findEvents()}">Annuler</a>
             </div>
         </form>
     </div>
     <br>
     <br>
-    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+    <a href="@{EvenementController.findEvents()}" class="btn btn-default">Retour</a>
 </div>
