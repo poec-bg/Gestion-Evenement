@@ -31,21 +31,25 @@
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon4">Date de début</span>
-                <input class="form-control" type="date" name="dateDebutString" value="${event?.dateDebut?.format("yyyy-MM-dd")}">
+                <input class="form-control" type="date" name="dateDebutString" value="${event.dateDebut?.format("yyyy-MM-dd")}">
                 <span class="error">#{error 'dateDebutString' /}</span>
 
                 <span class="input-group-addon" id="basic-addon5">Heure de début</span>
-                <input class="form-control" type="time" name="heureDebut" value="${event?.dateDebut?.format("HH:mm")}">
+                <input class="form-control" type="time" name="heureDebut" value="${event.dateDebut?.format("HH:mm")}">
                 <span class="error">#{error 'heureDebut' /}</span>
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon6">Date de fin</span>
-                <input class="form-control" type="date" name="dateFinString" value="${even?.dateFin?.format("yyyy-MM-dd")}">
+                <input class="form-control" type="date" name="dateFinString" value="${event.dateFin?.format("yyyy-MM-dd")}">
                 <span class="error">#{error 'dateFinString' /}</span>
 
                 <span class="input-group-addon" id="basic-addon7">Heure de fin</span>
-                <input class="form-control" type="time" name="heureFin" value="${event?.dateFin?.format("HH:mm")}">
+                <input class="form-control" type="time" name="heureFin" value="${event.dateFin?.format("HH:mm")}">
                 <span class="error">#{error 'heureFin' /}</span>
+            </div>
+            <div>
+                <input type="hidden" name="idEvenement" value="${event.idEvenement}">
+                <input type="hidden" name="emailCreateur" value="${event.createur.email}">
             </div>
 
             <div class="pull-left input-group">

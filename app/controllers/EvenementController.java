@@ -8,6 +8,7 @@ import play.Logger;
 import play.data.validation.Required;
 import play.mvc.Controller;
 import services.EvenementService;
+import services.UtilisateurService;
 import sun.util.calendar.CalendarDate;
 
 import java.sql.Time;
@@ -21,7 +22,7 @@ import java.util.List;
 public class EvenementController extends Controller{
 
     public static void eventList(){
-        String date1 = "2016-10-04 01:01";
+        String date1 = "2016-01-01 00:00";
         String date2 = "2016-12-31 23:59";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         List<Evenement> evenementList;
@@ -39,7 +40,7 @@ public class EvenementController extends Controller{
     public static void event(Long idEvenement){
         Evenement event = EvenementService.get().getEvent(idEvenement);
 
-        //TODO enlever les invites a la mano quand le model sera fonctionnel
+        //TODO enlever les invites fait a la mano quand le model sera fonctionnel
         Invite guest1 = new Invite();
         guest1.email = "toto@email.com";
         guest1.evenement = event;
@@ -109,16 +110,26 @@ public class EvenementController extends Controller{
         EvenementController.eventList();
     }
 
-    public static void saveModificatedEvent(@Required String nom,
-                                 String description,
-                                 String lieu,
-                                 @Required String dateDebutString,
-                                 String heureDebut,
-                                 @Required String dateFinString,
-                                 String heureFin) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
+    public static void updateEvent(long idEvenement) {
+        Evenement event = EvenementService.get().getEvent(idEvenement);
+        render(event);
+    }
+
+    public static void saveModificatedEvent(
+            @Required String nom,
+            String description,
+            String lieu,
+            @Required String dateDebutString,
+            String heureDebut,
+            @Required String dateFinString,
+            String heureFin,
+            @Required long idEvenement,
+            @Required String emailCreateur) {
+        try {
+
+            //formatage des dates(String) et heures(String) en (Date)
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             if (heureDebut == null || heureDebut.length() == 0){
                 heureDebut = "00:00";
                 System.out.println("heure debut mod : " + heureDebut);
@@ -132,23 +143,25 @@ public class EvenementController extends Controller{
             }
             Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
 
+            //recuperation du user depuis son id(email)
+            Utilisateur user = UtilisateurService.get().getUtilisateurByEmail(emailCreateur);
+
+            //initialisation de l'event pout eneregistrement
             Evenement event = new Evenement();
+            event.idEvenement = idEvenement;
             event.nom = nom;
             event.description = description;
             event.lieu = lieu;
             event.dateDebut = dateDebut;
             event.dateFin = dateFin;
+            event.createur = user;
+
 
             EvenementService.get().updateEvent(event);
             EvenementController.event(event.idEvenement);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void updateEvent(long idEvenement) {
-        Evenement event = EvenementService.get().getEvent(idEvenement);
-        render(event);
     }
 
 }
