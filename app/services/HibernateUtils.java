@@ -1,10 +1,8 @@
 package services;
 
-import models.Utilisateur;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 public class HibernateUtils {

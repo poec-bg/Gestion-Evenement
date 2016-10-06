@@ -33,6 +33,8 @@ public class Evenement implements Serializable{
         return result;
     }
 
+    public Evenement(){};
+
     public Evenement(Evenement model){
         if(model == null){
             return;

@@ -166,17 +166,18 @@ public class EvenementService {
             long idPremier = 0;
             while(dateDebut.isBefore(dateFinRepetition)){
                 //enregistrement du nouvel evenement
-                event.dateDebut = dateDebut.toDate();
-                event.dateFin = dateDebut.plus(dureeEvent).toDate();
+                Evenement eventI = new Evenement(event);
+                eventI.dateDebut = dateDebut.toDate();
+                eventI.dateFin = dateDebut.plus(dureeEvent).toDate();
                 if(i == 0){
                     idPremier = (long) session.save(event);
                 }else {
-                    session.save(event);
+                    session.save(eventI);
                 }
 
                 //on pousse dans la base de données par packet de 20
                 i++;
-                if(i%20 == 0){
+                if(i%30 == 0){
                     session.flush();
                     session.clear();
                 }
@@ -211,19 +212,19 @@ public class EvenementService {
     private long generateIdRepetition(){
         Logger.debug(TAG + " generateIdRepetition : []");
         Session session = HibernateUtils.getSession();
-        Criteria criteria = session.createCriteria(Evenement.class)
-                .setProjection(Projections.max("idEvenement"));
+            Criteria criteria = session.createCriteria(Evenement.class)
+                    .setProjection(Projections.max("idRepetition"));
+            long id = 1;
+            if(criteria.uniqueResult() != null){
+                id = (long) criteria.uniqueResult() + 1;
+            }
         session.close();
-        long id = 1;
-        if(criteria != null){
-            id = (long) criteria.uniqueResult() + 1;
-        }
         Logger.debug(TAG + " generateIdRepetition : return %d", id );
         return id;
     }
 
     public enum TypeRepetition{
-        JOUR(1, "DAY"), SEMAINE(1, "WEEK"), DEUX_SEMAINES(2, "WEEK"), MOIS(2, "MONTH"), ANNEES(1, "YEAR");
+        JOURNALIER(1, "DAY"), HEBDOMADAIRE(1, "WEEK"), BIMENSUEL(2, "WEEK"), MENSUEL(1, "MONTH"), ANNUEL(1, "YEAR");
 
         private int nb;
         private String type;

@@ -1,7 +1,5 @@
 import models.Evenement;
 import models.Utilisateur;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -307,7 +305,7 @@ public class EvenementTest {
     public void addEventsRepeat_ok(){
         Evenement resultat;
         try {
-            resultat = EvenementService.get().addEventsRepeat(evenementTest1, EvenementService.TypeRepetition.SEMAINE);
+            resultat = EvenementService.get().addEventsRepeat(evenementTest1, EvenementService.TypeRepetition.MENSUEL);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -319,7 +317,7 @@ public class EvenementTest {
     public void addEventsRepeat_eventNull(){
         Evenement resultat;
         try {
-            resultat = EvenementService.get().addEventsRepeat(null, EvenementService.TypeRepetition.SEMAINE);
+            resultat = EvenementService.get().addEventsRepeat(null, EvenementService.TypeRepetition.MENSUEL);
         } catch (Exception e) {
             assertTrue(true);
             return;
