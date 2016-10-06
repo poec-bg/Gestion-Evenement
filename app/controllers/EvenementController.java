@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.common.base.Strings;
 import controllers.secure.Check;
 import controllers.secure.Secure;
 import models.Evenement;
@@ -21,6 +22,7 @@ import java.util.List;
 @With(Secure.class)
 @Check({"ADMIN", "USER"})
 public class EvenementController extends Controller{
+    //TODO ajouter des logger a toutes les méthodes
 
     public static void findEvents(){
         Date dateDebut = new Date();
@@ -52,25 +54,27 @@ public class EvenementController extends Controller{
     public static void getEvent(Long idEvenement){
         Evenement event = EvenementService.get().getEvent(idEvenement);
 
-        //TODO enlever les invites fait a la mano quand le model sera fonctionnel
-        Invite guest1 = new Invite();
-        guest1.email = "toto@email.com";
-        guest1.evenement = event;
+        if(event != null){
+            //TODO enlever les invites fait a la mano quand le model sera fonctionnel
+            Invite guest1 = new Invite();
+            guest1.email = "toto@email.com";
+            guest1.evenement = event;
 
-        Invite guest2 = new Invite();
-        guest2.email = "tata@email.com";
-        guest2.evenement = event;
+            Invite guest2 = new Invite();
+            guest2.email = "tata@email.com";
+            guest2.evenement = event;
 
-        Invite guest3 = new Invite();
-        guest3.email = "titi@email.com";
-        guest3.evenement = event;
+            Invite guest3 = new Invite();
+            guest3.email = "titi@email.com";
+            guest3.evenement = event;
 
-        List<Invite> guestList = new ArrayList<>();
-        guestList.add(guest1);
-        guestList.add(guest2);
-        guestList.add(guest3);
+            List<Invite> guestList = new ArrayList<>();
+            guestList.add(guest1);
+            guestList.add(guest2);
+            guestList.add(guest3);
 
-        event.invites = guestList;
+            event.invites = guestList;
+        }
         render(event);
     }
 
@@ -84,7 +88,8 @@ public class EvenementController extends Controller{
                                  @Required String dateDebutString,
                                  String heureDebut,
                                  @Required String dateFinString,
-                                 String heureFin){
+                                 String heureFin,
+                                 Categorie couleur){
         if (validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             validation.keep(); // keep the errors for the next request
@@ -95,27 +100,34 @@ public class EvenementController extends Controller{
             // String dateDebut = yyyy-MM-dd
             // String heureDebut = HH:mm
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-            Evenement event;
-
-            if (heureDebut == null || heureDebut.length() == 0){
+            if (Strings.isNullOrEmpty(heureDebut)){
                 heureDebut = "00:00";
-                System.out.println("heure debut mod : " + heureDebut);
             }
-            System.out.println("date{"+dateDebutString+"} heure{"+heureDebut+"}");
             Date dateDebut = sdf.parse("" + dateDebutString + " " + heureDebut + "");
 
-            if (heureFin == null || heureFin.length() == 0){
+            if (Strings.isNullOrEmpty(heureFin)){
                 heureFin = "23:59";
-                System.out.println("heure fin mod : " + heureFin);
             }
             Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
 
             Utilisateur utilisateur = controllers.secure.Security.connectedUser();
-            event = EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
+            Evenement event = EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
+
+            if (Strings.isNullOrEmpty(event.description) || Strings.isNullOrEmpty(description)) {
+                event.description = description;
+            }
+            if (Strings.isNullOrEmpty(event.lieu) || Strings.isNullOrEmpty(lieu)) {
+                event.lieu = lieu;
+            }
+            if (event.categorie == null) {
+                event.categorie = Categorie.GREEN;
+            } else {
+                //TODO changer la couleur en fonction du paramète choisi
+                event.categorie = couleur;
+            }
+            EvenementService.get().updateEvent(event);
             EvenementController.getEvent(event.idEvenement);
         } catch (Exception e) {
-            //TODO renvoyer sur une page erreur ou recommencer l'opération
             e.printStackTrace();
         }
 
@@ -135,27 +147,20 @@ public class EvenementController extends Controller{
             String heureDebut,
             @Required String dateFinString,
             String heureFin,
-            @Required long idEvenement,
-            @Required String emailCreateur) {
+            @Required long idEvenement) {
         try {
 
-            //formatage des dates(String) et heures(String) en (Date)
+            //formatage des dates(String) et heures(String) en date*(Date)
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            if (heureDebut == null || heureDebut.length() == 0){
+            if (Strings.isNullOrEmpty(heureDebut)){
                 heureDebut = "00:00";
-                System.out.println("heure debut mod : " + heureDebut);
             }
-            System.out.println("date{"+dateDebutString+"} heure{"+heureDebut+"}");
             Date dateDebut = sdf.parse("" + dateDebutString + " " + heureDebut + "");
 
-            if (heureFin == null || heureFin.length() == 0){
+            if (Strings.isNullOrEmpty(heureFin)){
                 heureFin = "23:59";
-                System.out.println("heure fin mod : " + heureFin);
             }
             Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
-
-            //recuperation du user depuis son id(email)
-            Utilisateur user = UtilisateurService.get().getUtilisateurByEmail(emailCreateur);
 
             //initialisation de l'event pout eneregistrement
             Evenement event = new Evenement();
@@ -165,8 +170,7 @@ public class EvenementController extends Controller{
             event.lieu = lieu;
             event.dateDebut = dateDebut;
             event.dateFin = dateFin;
-            event.createur = user;
-
+            event.createur = controllers.secure.Security.connectedUser();
 
             EvenementService.get().updateEvent(event);
             EvenementController.getEvent(event.idEvenement);
