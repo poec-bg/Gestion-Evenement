@@ -12,13 +12,13 @@ import java.util.List;
 public class UtilisateurController extends Controller{
 
 
-    public static void userList() {
+    public static void findUsers() {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         utilisateurs = UtilisateurService.get().listUtilisateurs();
         render(utilisateurs);
     }
 
-    public static void user(String email) {
+    public static void getUser(String email) {
         Utilisateur user = UtilisateurService.get().getUtilisateurByEmail(email);
         render(user);
     }
@@ -44,7 +44,7 @@ public class UtilisateurController extends Controller{
             e.printStackTrace();
         }
 
-        UtilisateurController.user(utilisateur.email);
+        UtilisateurController.getUser(utilisateur.email);
     }
 
 }
