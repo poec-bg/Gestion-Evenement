@@ -4,10 +4,13 @@ import models.Evenement;
 import models.Utilisateur;
 import models.types.Categorie;
 import org.hibernate.*;
+import play.Logger;
+
 import java.util.Date;
 import java.util.List;
 
 public class EvenementService {
+    private static final String TAG = "EvenementService";
     private static EvenementService monInstance;
 
     private EvenementService(){
@@ -75,6 +78,7 @@ public class EvenementService {
     }
     //Lister des évènement entre les dates [debut] et [fin]
     public List<Evenement> listEvent(Date debut, Date fin, Categorie categorie){
+        Logger.debug(TAG + " listEvent: [%s %s %s]", debut, fin, (categorie!=null?categorie.getLabel():"null"));
         Session session = HibernateUtils.getSession();
         Query query = session.createQuery("FROM Evenement WHERE dateDebut <= :dtFin AND dateFin >= :dtDebut AND categorie = :cat ORDER BY dateDebut ASC");
         query.setTimestamp("dtDebut", debut);
