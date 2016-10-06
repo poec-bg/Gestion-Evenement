@@ -14,7 +14,7 @@
             <input class="form-control" type="date" name="dateFin" value="${dateFin.format("YYYY-MM-dd")}">
             <span class="error">#{error 'dateFinString' /}</span>
         </div>
-            <input class="btn btn-primary" type="submit" value="Rafraîchir">
+        <input class="btn btn-primary" type="submit" value="Rafraîchir">
     </form>
 </div>
 <div class="container">
@@ -26,6 +26,9 @@
         <div class="container">
             <ul class="list-group">
                 <li class="list-group-item" >
+                    #{if event.categorie != null}
+                        <img src="/public/images/${event.categorie.getLabel()}.png">
+                    #{/if}
                 ${event?.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event?.dateFin?.format("dd/MM/YY HH:mm")} :
                     <a href="@{EvenementController.getEvent(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
                 </li>

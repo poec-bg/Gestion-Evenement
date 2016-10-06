@@ -10,6 +10,9 @@
 #{else }
     <ul class="list-group">
         <li class="list-group-item active">
+            #{if event.categorie != null}
+                <img src="/public/images/${event.categorie.getLabel()}.png">
+            #{/if}
             <strong>${event.nom}</strong> - Lieu : ${event?.lieu}
             <a href="@{EvenementController.updateEvent(event.idEvenement)}" class="btn btn-warning pull-right">Modifier</a>
         </li>
