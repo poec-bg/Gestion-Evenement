@@ -29,6 +29,7 @@ public class EvenementService {
      *  Fait appel à sa methode soeur addEvent(Evenement evenement)
      */
     public Evenement addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws Exception {
+        Logger.debug(TAG + " addEvent: [%s %s %s]", debut, fin, (createur!=null?createur.email:"null"));
         //création de l'objet
         Evenement evenement = new Evenement();
         evenement.nom = nom;
@@ -41,6 +42,7 @@ public class EvenementService {
 
     //Enregistre un nouvelle évènement à partir d'un objet Evenement [evenemnt]
     public Evenement addEvent(Evenement evenement) throws Exception {
+        Logger.debug(TAG + " addEvent: [Event] %s", (evenement!=null?evenement.toString():"null") );
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
@@ -68,6 +70,7 @@ public class EvenementService {
 
     //Lister des évènement entre les dates [debut] et [fin]
     public List<Evenement> listEvent(Date debut, Date fin){
+        Logger.debug(TAG + " listEvent: [%s %s]", debut, fin);
         Session session = HibernateUtils.getSession();
         Query query = session.createQuery("FROM Evenement WHERE dateDebut <= :dtFin AND dateFin >= :dtDebut ORDER BY dateDebut ASC");
         query.setTimestamp("dtDebut", debut);
@@ -93,6 +96,7 @@ public class EvenementService {
      * RETURN : Null si non trouvé.
      */
     public Evenement getEvent(long id){
+        Logger.debug(TAG + " getEvent: [%d]", id );
         Session session = HibernateUtils.getSession();
             Evenement resultat = (Evenement) session.get(Evenement.class, id);
         session.close();
@@ -101,6 +105,7 @@ public class EvenementService {
 
     //Update evenement
     public void updateEvent(Evenement evenement) throws Exception {
+        Logger.debug(TAG + " updateEvent: [%s]", (evenement!=null?evenement.toString() : "null") );
         //vérifications
         boolean estOk = true;
         estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
@@ -127,6 +132,7 @@ public class EvenementService {
 
     //DELETE evenement
     public void deleteEvent(Evenement evenement) throws Exception {
+        Logger.debug(TAG + " deleteEvent: [%s]", (evenement!=null?evenement.toString() : "null") );
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -138,6 +144,35 @@ public class EvenementService {
             throw new Exception("HibernateException: " + e.getMessage() );
         }finally {
             session.close();
+        }
+    }
+
+    /*
+    * Création de plusieurs évènements de manière répété, pour les NB_ANNEES_RECURENCE années avenir.
+    */
+    public void addEventRepeat(Evenement event, TypeRepetition typeRepetition){
+        Logger.debug(TAG + " addEventRepeat: [%s %s]", (event!=null?event.toString() : "null"), (typeRepetition!=null?typeRepetition.getNb() + " " + typeRepetition.type : "null") );
+        //vérification
+
+    }
+
+    public enum TypeRepetition{
+        JOUR(1, 1), SEMAINE(1, 2), DEUX_SEMAINES(2, 2), MOIS(2, 3), ANNEES(1, 4);
+
+        private int nb;
+        private int type;
+
+        private TypeRepetition(int nb, int type){
+            this.nb = nb;
+            this.type = type;
+        }
+
+        private int getNb(){
+            return nb;
+        }
+
+        private int getType(){
+            return type;
         }
     }
 

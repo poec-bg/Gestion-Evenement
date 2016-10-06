@@ -23,4 +23,12 @@ public class Evenement implements Serializable{
     public List<Invite> invites = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     public Categorie categorie;
+
+    @Override
+    public String toString() {
+        String result = "[" + this.idEvenement + " ; " + this.categorie + "] " + this.nom
+                + " (" + this.dateDebut + " au " + this.dateFin + " ) "
+                + "à " + this.lieu + " \n" + this.description ;
+        return result;
+    }
 }
