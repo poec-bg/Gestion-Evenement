@@ -3,6 +3,9 @@ package services;
 
 import exceptions.InvalidArgumentException;
 import models.Utilisateur;
+import com.google.common.base.Strings;
+import org.hibernate.*;
+import org.mindrot.jbcrypt.BCrypt;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,6 +17,8 @@ import java.util.List;
 
 
 public class UtilisateurService {
+
+    private static int BCRYPT_WORKLOAD = 12;
 
 
     private List<Utilisateur> utilisateurs;
@@ -37,11 +42,7 @@ public class UtilisateurService {
         return instance;
     }
 
-    // Création d'un nouvel utilisateur: email et mots de passe requis
-
     public Utilisateur create(String email, String motDePasse) throws Exception {
-
-
         List<String> validationMessages = new ArrayList<>();
         if (email == null || email.equals("")) {
             validationMessages.add("Le email ne peut être null ou vide");
@@ -59,9 +60,8 @@ public class UtilisateurService {
 
         Utilisateur utilisateur=new Utilisateur();
         utilisateur.email = email;
-        utilisateur.motDePasse=motDePasse;
+        utilisateur.motDePasse = encodePassword(motDePasse);
         utilisateur.isSupprime = false;
-
 
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
@@ -76,13 +76,9 @@ public class UtilisateurService {
             session.close();
         }
         return utilisateur;
-
     }
 
-
     public Utilisateur create(String email, String motDePasse, String nom, String prenom) throws Exception {
-
-
         List<String> validationMessages = new ArrayList<>();
         if (email == null || email.equals("")) {
             validationMessages.add("Le email ne peut être null ou vide");
@@ -100,7 +96,7 @@ public class UtilisateurService {
 
         Utilisateur utilisateur=new Utilisateur();
         utilisateur.email = email;
-        utilisateur.motDePasse=motDePasse;
+        utilisateur.motDePasse = encodePassword(motDePasse);
         utilisateur.nom=nom;
         utilisateur.prenom=prenom;
         utilisateur.isSupprime = false;
@@ -118,13 +114,9 @@ public class UtilisateurService {
             session.close();
         }
         return utilisateur;
-
     }
 
-      //modifier utilisateur
-
     public void updateUtilisateur(Utilisateur utilisateur, String nom, String prenom) throws InvalidArgumentException {
-
         List<String> validationMessages = new ArrayList<>();
         if (utilisateur == null) {
             validationMessages.add("L'utilisateur ne peut être null");
@@ -144,34 +136,6 @@ public class UtilisateurService {
         t.commit();
         session.close();
     }
-
-   // Authentification
-
-    public boolean authenticate(String email, String motDePasse) throws Exception {
-
-        List<String> validationMessages = new ArrayList<>();
-        if (email== null || email== "") {
-            validationMessages.add("L'email ne peut être null ou vide");
-        }
-        if (motDePasse== null || motDePasse== "")  {
-            validationMessages.add("Le motDePasse ne peut être null ou vide");
-        }
-        if (validationMessages.size() > 0) {
-            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
-        }
-        Session session = HibernateUtils.getSession();
-        Query query = session.createQuery("from Utilisateur where email =:email");
-        query.setString("email", email);
-        Utilisateur utilisateur = (Utilisateur) query.uniqueResult();
-        if (utilisateur == null) {
-            return false;
-        }
-        session.close();
-        return false;
-    }
-
-
-      // Lister les utilisateurs
 
     public   List <Utilisateur> listUtilisateurs( ){
         Session session = HibernateUtils.getSession();
@@ -193,8 +157,39 @@ public class UtilisateurService {
         Session session = HibernateUtils.getSession();
         Utilisateur utilisateur=(Utilisateur) session.get(Utilisateur.class, email);
         return utilisateur;
-
     }
+
+    private String encodePassword(String password) {
+        String salt = BCrypt.gensalt(BCRYPT_WORKLOAD);
+        return BCrypt.hashpw(password, salt);
+    }
+
+    public boolean authenticate(String email, String motDePasse) throws InvalidArgumentException {
+
+        List<String> validationMessages = new ArrayList<>();
+        if (Strings.isNullOrEmpty(email)) {
+            validationMessages.add("L'email ne peut ?re null ou vide");
+        }
+        if (Strings.isNullOrEmpty(motDePasse)) {
+            validationMessages.add("Le motDePasse ne peut ?re null ou vide");
+        }
+        if (validationMessages.size() > 0) {
+            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
+        }
+        Session session = HibernateUtils.getSession();
+        Query query = session.createQuery("from Utilisateur where email =:email");
+        query.setString("email", email);
+        Utilisateur utilisateur = (Utilisateur) query.uniqueResult();
+        if (utilisateur == null) {
+            return false;
+        }
+        session.close();
+        if (BCrypt.checkpw(motDePasse, utilisateur.motDePasse)) {
+            return true;
+        }
+        return false;
+    }
+
 
     //Récuperer un utilisateur par nom
     public Utilisateur getUtilisateurByName(String nom) {
@@ -207,7 +202,7 @@ public class UtilisateurService {
         if (utilisateur == null) {
             throw new Exception( "L'utilisateur ne peut ?re null" );
         }
-        utilisateur.isSupprime=true;
+        utilisateur.isSupprime = true;
         Session session = HibernateUtils.getSession();
         Transaction t = session.beginTransaction();
         session.update(utilisateur);
@@ -215,21 +210,15 @@ public class UtilisateurService {
         session.close();
     }
 
-//    public void  deleteUtilisateur(Utilisateur utilisateur) throws Exception {
-//        Session session = HibernateUtils.getSession();
-//        Transaction tx = null;
-//        utilisateur.isSupprime = true;
-//        try{
-//            tx = session.beginTransaction();
-//            session.update(utilisateur);
-//            tx.commit();
-//        }catch (HibernateException e) {
-//            if (tx!=null) tx.rollback();
-//            throw new Exception("HibernateException: " + e.getMessage() );
-//        }finally {
-//            session.close();
-//        }
-//    }
 
+    public void clear() {
+        Session session = HibernateUtils.getSession();
+        Transaction tx=session.beginTransaction();
 
+        //creation de la requette
+        Query q =session.createQuery("delete Utilisateur ");
+        //Exécution de la requete
+        q.executeUpdate();
+        tx.commit();
+    }
 }
