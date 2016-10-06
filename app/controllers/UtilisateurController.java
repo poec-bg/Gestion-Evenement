@@ -26,29 +26,4 @@ public class UtilisateurController extends Controller{
         Utilisateur user = UtilisateurService.get().getUtilisateurByEmail(email);
         render(user);
     }
-
-    public static void newUser() {
-        render();
-    }
-
-    public static void saveUser(String nom,
-                                String prenom,
-                                @Required String email,
-                                @Required String motDePasse) {
-        Utilisateur utilisateur = new Utilisateur();
-        try {
-            if (nom != null && nom != ""){
-                utilisateur.nom = nom;
-            }
-            if (prenom != null && prenom != "") {
-                utilisateur.prenom = prenom;
-            }
-            utilisateur = UtilisateurService.get().create(email, motDePasse, nom, prenom);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        UtilisateurController.getUser(utilisateur.email);
-    }
-
 }
