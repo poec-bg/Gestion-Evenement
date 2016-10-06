@@ -1,25 +1,25 @@
 #{extends 'main.html' /}
 #{set title:'Calendar - Liste des évenements' /}
 
-<div class="container">
+<div class="container clearfix">
     <h1>Liste des évenements :</h1>
-    <form action="@{EvenementController.eventListDate}" method="post">
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Date de début</span>
+    <form action="@{EvenementController.eventListDate}" method="post" class="form-inline">
+        <div class="form-group">
+            <label>Filtrer du </label>
             <input class="form-control" type="date" name="dateDebut" value="${dateDebut.format("YYYY-MM-dd")}">
             <span class="error">#{error 'dateDebutString' /}</span>
-
-            <span class="input-group-addon" id="basic-addon2">Date de fin</span>
+        </div>
+        <div class="form-group">
+            <label>au</label>
             <input class="form-control" type="date" name="dateFin" value="${dateFin.format("YYYY-MM-dd")}">
             <span class="error">#{error 'dateFinString' /}</span>
         </div>
-        <div class="input-group">
             <input class="btn btn-primary" type="submit" value="Rafraîchir">
-        </div>
     </form>
-
-#{if evenementList == null}
-    <h3><i>pas d'évenement sur la période indiquée</i></h3>
+</div>
+<div class="container">
+#{if evenementList == null || evenementList.size() == 0}
+    <h3 class="alert alert-warning" role="alert"><i>pas d'évenement sur la période indiquée</i></h3>
 #{/if}
 #{else }
     #{list evenementList, as:'event'}
