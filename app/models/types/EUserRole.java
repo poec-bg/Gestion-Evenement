@@ -3,7 +3,7 @@ package models.types;
 public enum EUserRole {
 
 
-    ADMIN("Administrateur"),CLIENT("Client Normal");
+    ADMIN("Administrateur"),USER("User Normal");
 
     private String label;
 

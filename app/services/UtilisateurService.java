@@ -4,12 +4,11 @@ package services;
 import exceptions.InvalidArgumentException;
 import models.Utilisateur;
 import com.google.common.base.Strings;
+import models.types.EUserRole;
 import org.hibernate.*;
 import org.mindrot.jbcrypt.BCrypt;
 import validators.EmailValidator;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -60,7 +59,7 @@ public class UtilisateurService {
         utilisateur.email = email;
         utilisateur.motDePasse = encodePassword(motDePasse);
         utilisateur.isSupprime = false;
-
+        utilisateur.role= EUserRole.USER;
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -98,6 +97,7 @@ public class UtilisateurService {
         utilisateur.nom=nom;
         utilisateur.prenom=prenom;
         utilisateur.isSupprime = false;
+        utilisateur.role= EUserRole.USER;
 
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
@@ -189,9 +189,16 @@ public class UtilisateurService {
     }
 
 
-    public void deleteUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
+    //Récuperer un utilisateur par nom
+    public Utilisateur getUtilisateurByName(String nom) {
+        Session session= HibernateUtils.getSession();
+        Utilisateur utilisateur=(Utilisateur) session.get(Utilisateur.class, nom);
+        return utilisateur;
+    }
+
+    public void deleteUtilisateur(Utilisateur utilisateur) throws Exception {
         if (utilisateur == null) {
-            throw new InvalidArgumentException(new String[] { "L'utilisateur ne peut ?re null" });
+            throw new Exception( "L'utilisateur ne peut ?re null" );
         }
         utilisateur.isSupprime = true;
         Session session = HibernateUtils.getSession();
