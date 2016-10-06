@@ -242,6 +242,18 @@ public class EvenementService {
         }
     }
 
+    // vide la table Evenement de la base de test
+    public void clearTest(){
+        Logger.debug(TAG + " clearTest: []");
+        HibernateUtils.HibernateTest();
+        Session session = HibernateUtils.getSession();
+            Transaction tx=session.beginTransaction();
+            Query q =session.createQuery("delete Utilisateur ");
+            q.executeUpdate();
+            tx.commit();
+        session.close();
+    }
+
 //Règles de validité de la classe Evenement
     private boolean validateEvent(Evenement event){
         if(event == null){

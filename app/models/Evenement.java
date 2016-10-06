@@ -19,7 +19,7 @@ public class Evenement implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateFin;
     public String lieu;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement", cascade= CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement")
     public List<Invite> invites = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     public Categorie categorie;

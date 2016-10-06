@@ -23,13 +23,16 @@ public class EvenementTest {
         //on se place dans la bdd test
         HibernateUtils.HibernateTest();
 
-        user1 = new Utilisateur();
-        user1.email = "testsEvenement@test.org";
-        user1.motDePasse = "monMotDePasse";
-        try {
-            UtilisateurService.get().create(user1.email, user1.motDePasse);
-        } catch (Exception e) {
-            e.printStackTrace();
+        user1 = UtilisateurService.get().getUtilisateurByEmail("testsEvenement@test.org");
+        if(user1 == null){
+            user1 = new Utilisateur();
+            user1.email = "testsEvenement@test.org";
+            user1.motDePasse = "monMotDePasse";
+            try {
+                UtilisateurService.get().create(user1.email, user1.motDePasse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         evenementTest1 = new Evenement();
@@ -47,7 +50,8 @@ public class EvenementTest {
 
     @AfterClass
     public static void clearTests(){
-//        UtilisateurService.get().remove(user1.email);
+        EvenementService.get().clearTest();
+        UtilisateurService.get().clear();
     }
 
 //Test connection à la base de données

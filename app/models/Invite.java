@@ -9,7 +9,7 @@ public class Invite implements Serializable {
     private long numLign;
     @Column(name = "email", nullable = false)
     public String email;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinColumn(name = "idEvenement", nullable = false)
     public Evenement evenement;
 }
