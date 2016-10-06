@@ -4,12 +4,9 @@ package services;
 import exceptions.InvalidArgumentException;
 import models.Utilisateur;
 import com.google.common.base.Strings;
+import models.types.EUserRole;
 import org.hibernate.*;
 import org.mindrot.jbcrypt.BCrypt;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import validators.EmailValidator;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +59,7 @@ public class UtilisateurService {
         utilisateur.email = email;
         utilisateur.motDePasse = encodePassword(motDePasse);
         utilisateur.isSupprime = false;
-
+        utilisateur.role= EUserRole.USER;
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
@@ -100,6 +97,7 @@ public class UtilisateurService {
         utilisateur.nom=nom;
         utilisateur.prenom=prenom;
         utilisateur.isSupprime = false;
+        utilisateur.role= EUserRole.USER;
 
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
