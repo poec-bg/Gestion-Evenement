@@ -32,4 +32,25 @@ public class Evenement implements Serializable{
                 + "à " + this.lieu + " \n" + this.description ;
         return result;
     }
+
+    public Evenement(Evenement model){
+        if(model == null){
+            return;
+        }
+        this.createur = model.createur;
+        this.nom = model.nom;
+        this.description = model.description;
+        this.dateDebut = model.dateDebut;
+        this.dateFin = model.dateFin;
+        this.lieu = model.lieu;
+        this.categorie = model.categorie;
+        this.idRepetition = model.idRepetition;
+        if(model.invites.size() > 0){
+            for (Invite inviteI : model.invites){
+                Invite inviteNew = new Invite();
+                inviteNew.email = inviteI.email;
+                this.invites.add(inviteNew);
+            }
+        }
+    }
 }
