@@ -22,19 +22,32 @@ import java.util.List;
 public class EvenementController extends Controller{
 
     public static void eventList(){
-        String date1 = "2016-01-01 00:00";
-        String date2 = "2016-12-31 23:59";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date dateDebut = new Date();
+        Date dateFin = new Date();
+        DateTime dtFin = new DateTime(dateDebut);
+        dtFin = dtFin.plusMonths(1);
+        dateFin = dtFin.toDate();
+
+        List<Evenement> evenementList;
+        evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
+
+        render(evenementList, dateDebut, dateFin);
+    }
+
+    public static void eventListDate(Date dateDebut, Date dateFin){
+
+//        Date dateDebut = null;
+//        Date dateFin = null;
+//        try {
+//            dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(dateDebutString);
+//            dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(dateFinString);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         List<Evenement> evenementList;
 
-        try {
-            Date dateDebut = sdf.parse(date1);
-            Date dateFin = sdf.parse(date2);
-            evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
-            render(evenementList);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
+        renderTemplate("EvenementController/eventList.html", evenementList, dateDebut, dateFin);
     }
 
     public static void event(Long idEvenement){
