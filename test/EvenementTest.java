@@ -1,5 +1,7 @@
 import models.Evenement;
 import models.Utilisateur;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -46,6 +48,19 @@ public class EvenementTest {
     @AfterClass
     public static void clearTests(){
 //        UtilisateurService.get().remove(user1.email);
+    }
+
+//Test connection à la base de données
+    @Test
+    public void testHybernateSession(){
+        try{
+            Session session = HibernateUtils.getSession();
+            session.close();
+        }catch (HibernateException e){
+            fail();
+            return;
+        }
+        assertTrue(true);
     }
 
 //Tests sur les fonctions : addEvent
@@ -290,6 +305,41 @@ public class EvenementTest {
 
         try {
             EvenementService.get().deleteEvent(eventTest);
+        } catch (Exception e) {
+            assertTrue(true);
+            return;
+        }
+        fail();
+    }
+//Tests sur la fontion : addEventsRepeat
+    @Test
+    public void addEventsRepeat_ok(){
+        Evenement resultat;
+        try {
+            resultat = EvenementService.get().addEventsRepeat(evenementTest1, EvenementService.TypeRepetition.SEMAINE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+            return;
+        }
+        assertNotNull(resultat);
+    }
+    @Test
+    public void addEventsRepeat_eventNull(){
+        Evenement resultat;
+        try {
+            resultat = EvenementService.get().addEventsRepeat(null, EvenementService.TypeRepetition.SEMAINE);
+        } catch (Exception e) {
+            assertTrue(true);
+            return;
+        }
+        fail();
+    }
+    @Test
+    public void addEventsRepeat_typeNUll(){
+        Evenement resultat;
+        try {
+            resultat = EvenementService.get().addEventsRepeat(evenementTest1, null);
         } catch (Exception e) {
             assertTrue(true);
             return;

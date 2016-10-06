@@ -4,6 +4,9 @@ import models.Evenement;
 import models.Utilisateur;
 import models.types.Categorie;
 import org.hibernate.*;
+import org.hibernate.criterion.Projections;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import play.Logger;
 
 import java.util.Date;
@@ -11,6 +14,7 @@ import java.util.List;
 
 public class EvenementService {
     private static final String TAG = "EvenementService";
+    private static final int NB_ANNEES_RECURENCE = 25;
     private static EvenementService monInstance;
 
     private EvenementService(){
@@ -44,11 +48,7 @@ public class EvenementService {
     public Evenement addEvent(Evenement evenement) throws Exception {
         Logger.debug(TAG + " addEvent: [Event] %s", (evenement!=null?evenement.toString():"null") );
         //vérifications
-        boolean estOk = true;
-        estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
-        estOk = estOk && validateIdCreateur(evenement.createur);
-        estOk = estOk && validateNom(evenement.nom);
-        if(!estOk){
+        if(!validateEvent(evenement)){
             throw new Exception("Invalide argument exception.");
         }else {
             //enregistrement
@@ -107,11 +107,7 @@ public class EvenementService {
     public void updateEvent(Evenement evenement) throws Exception {
         Logger.debug(TAG + " updateEvent: [%s]", (evenement!=null?evenement.toString() : "null") );
         //vérifications
-        boolean estOk = true;
-        estOk = estOk && validateDates(evenement.dateDebut, evenement.dateFin);
-        estOk = estOk && validateIdCreateur(evenement.createur);
-        estOk = estOk && validateNom(evenement.nom);
-        if(!estOk){
+        if(!validateEvent(evenement) ){
             throw new Exception("Invalide argument exception.");
         }else {
             //sauvegarde
@@ -149,20 +145,90 @@ public class EvenementService {
 
     /*
     * Création de plusieurs évènements de manière répété, pour les NB_ANNEES_RECURENCE années avenir.
+    * IN : event = evenement de reference, typeRepetition = type de répétition des évènements
+    * RETURN : le premier evenement enregistré.
     */
-    public void addEventRepeat(Evenement event, TypeRepetition typeRepetition){
+    public Evenement addEventsRepeat(Evenement event, TypeRepetition typeRepetition) throws Exception {
         Logger.debug(TAG + " addEventRepeat: [%s %s]", (event!=null?event.toString() : "null"), (typeRepetition!=null?typeRepetition.getNb() + " " + typeRepetition.type : "null") );
-        //vérification
+        //vérifications
+        if( !validateEvent(event) | typeRepetition == null){
+            throw new Exception("Invalide argument exception.");
+        }else {
+            Evenement premiereEvent = null;
+            event.idRepetition = generateIdRepetition();
+            DateTime dateFinRepetition = new DateTime(event.dateDebut).plusYears(NB_ANNEES_RECURENCE);
+            DateTime dateDebut = new DateTime(event.dateDebut);
+            Duration dureeEvent = new Duration(dateDebut, new DateTime(event.dateFin));
 
+            Session session = HibernateUtils.getSession();
+            Transaction tx = session.beginTransaction();
+            int i = 0;
+            long idPremier = 0;
+            while(dateDebut.isBefore(dateFinRepetition)){
+                //enregistrement du nouvel evenement
+                event.dateDebut = dateDebut.toDate();
+                event.dateFin = dateDebut.plus(dureeEvent).toDate();
+                if(i == 0){
+                    idPremier = (long) session.save(event);
+                }else {
+                    session.save(event);
+                }
+
+                //on pousse dans la base de données par packet de 20
+                i++;
+                if(i%20 == 0){
+                    session.flush();
+                    session.clear();
+                }
+
+                //préparation du prochain
+                switch (typeRepetition.type){
+                    case "DAY":
+                        dateDebut = dateDebut.plusDays( typeRepetition.getNb() );
+                        break;
+                    case "WEEK":
+                        dateDebut = dateDebut.plusWeeks( typeRepetition.getNb() );
+                        break;
+                    case "MONTH":
+                        dateDebut = dateDebut.plusMonths( typeRepetition.getNb() );
+                        break;
+                    case "YEAR":
+                        dateDebut = dateDebut.plusYears( typeRepetition.getNb() );
+                        break;
+                }
+            }
+            tx.commit();
+            session.close();
+            if(idPremier == 0){
+                return null;
+            }else {
+                return getEvent(idPremier);
+            }
+        }
+    }
+
+    //Donne idRepetition non utilisé (max +1) dans la bdd
+    private long generateIdRepetition(){
+        Logger.debug(TAG + " generateIdRepetition : []");
+        Session session = HibernateUtils.getSession();
+        Criteria criteria = session.createCriteria(Evenement.class)
+                .setProjection(Projections.max("idEvenement"));
+        session.close();
+        long id = 1;
+        if(criteria != null){
+            id = (long) criteria.uniqueResult() + 1;
+        }
+        Logger.debug(TAG + " generateIdRepetition : return %d", id );
+        return id;
     }
 
     public enum TypeRepetition{
-        JOUR(1, 1), SEMAINE(1, 2), DEUX_SEMAINES(2, 2), MOIS(2, 3), ANNEES(1, 4);
+        JOUR(1, "DAY"), SEMAINE(1, "WEEK"), DEUX_SEMAINES(2, "WEEK"), MOIS(2, "MONTH"), ANNEES(1, "YEAR");
 
         private int nb;
-        private int type;
+        private String type;
 
-        private TypeRepetition(int nb, int type){
+        private TypeRepetition(int nb, String type){
             this.nb = nb;
             this.type = type;
         }
@@ -171,12 +237,23 @@ public class EvenementService {
             return nb;
         }
 
-        private int getType(){
+        private String getType(){
             return type;
         }
     }
 
 //Règles de validité de la classe Evenement
+    private boolean validateEvent(Evenement event){
+        if(event == null){
+            return false;
+        }
+        boolean estOk = true;
+        estOk = estOk && validateDates(event.dateDebut, event.dateFin);
+        estOk = estOk && validateIdCreateur(event.createur);
+        estOk = estOk && validateNom(event.nom);
+        return estOk;
+    }
+
     private boolean validateDates(Date debut, Date fin){
         //règle : date de début <= date de fin
         if( debut.after(fin) ) {
@@ -206,4 +283,5 @@ public class EvenementService {
         }
         return true;
     }
+
 }

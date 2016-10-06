@@ -23,6 +23,7 @@ public class Evenement implements Serializable{
     public List<Invite> invites = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     public Categorie categorie;
+    public long idRepetition;
 
     @Override
     public String toString() {

@@ -33,19 +33,4 @@ public class HibernateUtils {
 	public static Session getSession() throws HibernateException{
 		return sessionFactory.openSession();
 	}
-
-	//Initilisation de la base de données
-	public static void initBdd(){
-		Session session = getSession();
-		Transaction tx = null;
-		try{
-			tx = session.beginTransaction();
-				session.save( new Utilisateur() );
-			tx.commit();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			session.close();
-		}
-	}
 }
