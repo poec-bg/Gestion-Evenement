@@ -11,13 +11,16 @@
 		<property name="hibernate.connection.url">jdbc:mysql://10.0.0.174:3306/calendar</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">formation</property>
+		<!-- Comportemnt pour la conservation des tables -->
+		<property name="hbm2ddl.auto">update</property>
+
+		<!-- Comportement du batch -->
+		<property name="hibernate.jdbc.batch_size">30</property>
 		<!-- Affiche les logs SQL -->
 <!--		<property name="show_sql">true</property> -->
 <!--		<property name="hibernate.format_sql">true</property> -->
 <!--		<property name="use_sql_comments">true</property> -->
-		
-		<!-- Comportemnt pour la conservation des tables -->
-		<property name="hbm2ddl.auto">update</property>
+
 		
 		<!-- Fichiers à mapper -->
 		<mapping class="models.Evenement" />
