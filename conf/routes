@@ -8,11 +8,17 @@ GET     /index                                  Application.index
 GET     /contact                                Application.contact
 GET     /apropos                                Application.apropos
 
+# Secure
+GET	    /login/?			                    secure.Secure.login
+POST    /login                                  secure.Secure.authenticate
+GET     /logout/?                               secure.Secure.logout
+
 # Utilisateur
 GET     /utilisateurs                           UtilisateurController.findUsers
 GET     /utilisateur/{email}                    UtilisateurController.getUser
 GET     /nouveaucompte                          UtilisateurController.newUser
 POST    /utilisateur/enregistrer                UtilisateurController.saveUser
+GET     /connexion                              UtilisateurController.login
 
 # Evenement
 POST    /evenements/filtrerDate                 EvenementController.findEventsByDate

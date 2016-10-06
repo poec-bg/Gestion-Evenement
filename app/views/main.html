@@ -38,6 +38,14 @@
                     </li>
                 </ul>
             </div>
+
+        #{if controllers.secure.Security.isConnected()}
+            <li><a href="@{secure.Secure.logout()}">Se déconnecter</a></li>
+        #{/if}
+        #{else}
+            <li><a href="@{secure.Secure.login()}">Se connecter</a></li>
+        #{/else}
+
         </div>
     </nav>
 </header>
