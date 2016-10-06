@@ -3,16 +3,20 @@
 
 <div class="container">
     <h1>Liste des évenements :</h1>
-    <div class="container clearfix">
-        <ul class="list-group">
-            <li class="list-group-item active">
-                <strong>${event.nom}</strong> - Lieu : ${event?.lieu}
-                <a href="@{EvenementController.updateEvent(event.idEvenement)}" class="btn btn-warning pull-right">Modifier</a>
-            </li>
-            <li class="list-group-item">
-                <strong>Date - </strong>début : ${event.dateDebut.format("dd/MM/YY - HH:mm")} - fin : ${event.dateFin.format("dd/MM/YY - HH:mm")}
-            </li>
-            <li class="list-group-item">${event?.description}</li>
+<div class="container clearfix">
+#{if event == null}
+    <h3 class="alert alert-warning" role="alert"><i>l'évènement recherché n'existe pas !</i></h3>
+#{/if}
+#{else }
+    <ul class="list-group">
+        <li class="list-group-item active">
+            <strong>${event.nom}</strong> - Lieu : ${event?.lieu}
+            <a href="@{EvenementController.updateEvent(event.idEvenement)}" class="btn btn-warning pull-right">Modifier</a>
+        </li>
+        <li class="list-group-item">
+            <strong>Date - </strong>début : ${event.dateDebut.format("dd/MM/YY - HH:mm")} - fin : ${event.dateFin.format("dd/MM/YY - HH:mm")}
+        </li>
+        <li class="list-group-item">${event?.description}</li>
         #{if event.invites.size() == 0}
             <li class="list-group-item"><i>pas d'invité</i></li>
         #{/if}
@@ -27,7 +31,8 @@
                 </div>
             </li>
         #{/else}
-        </ul>
-    </div>
+    </ul>
+</div>
+#{/else}
     <a href="@{controllers.EvenementController.findEvents}" class="btn btn-default">Retour</a>
 </div>
