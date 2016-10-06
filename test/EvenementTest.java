@@ -54,19 +54,6 @@ public class EvenementTest {
         UtilisateurService.get().clear();
     }
 
-//Test connection à la base de données
-    @Test
-    public void testHybernateSession(){
-        try{
-            Session session = HibernateUtils.getSession();
-            session.close();
-        }catch (HibernateException e){
-            fail();
-            return;
-        }
-        assertTrue(true);
-    }
-
 //Tests sur les fonctions : addEvent
     @Test
     public void addEvent_OK(){
