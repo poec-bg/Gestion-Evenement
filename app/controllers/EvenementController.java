@@ -107,18 +107,18 @@ public class EvenementController extends Controller{
             // String dateDebut = yyyy-MM-dd
             // String heureDebut = HH:mm
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            if (Strings.isNullOrEmpty(heureDebut)){
-                heureDebut = "00:00";
-            }
+            if (Strings.isNullOrEmpty(heureDebut)){heureDebut = "00:00";}
             Date dateDebut = sdf.parse("" + dateDebutString + " " + heureDebut + "");
 
-            if (Strings.isNullOrEmpty(heureFin)){
-                heureFin = "23:59";
-            }
+            if (Strings.isNullOrEmpty(heureFin)){heureFin = "23:59";}
             Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
 
             Utilisateur utilisateur = controllers.secure.Security.connectedUser();
-            Evenement event = EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
+            Evenement event = new Evenement();
+            event.nom = nom;
+            event.dateDebut = dateDebut;
+            event.dateFin = dateFin;
+            event.createur = utilisateur;
 
             if (Strings.isNullOrEmpty(event.description) || Strings.isNullOrEmpty(description)) {
                 event.description = description;
@@ -132,7 +132,8 @@ public class EvenementController extends Controller{
                 //TODO changer la couleur en fonction du paramète choisi
                 event.categorie = couleur;
             }
-            EvenementService.get().updateEvent(event);
+
+            event = EvenementService.get().addEvent(event);
             EvenementController.getEvent(event.idEvenement);
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,14 +163,10 @@ public class EvenementController extends Controller{
 
             //formatage des dates(String) et heures(String) en date*(Date)
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            if (Strings.isNullOrEmpty(heureDebut)){
-                heureDebut = "00:00";
-            }
+            if (Strings.isNullOrEmpty(heureDebut)){heureDebut = "00:00";}
             Date dateDebut = sdf.parse("" + dateDebutString + " " + heureDebut + "");
 
-            if (Strings.isNullOrEmpty(heureFin)){
-                heureFin = "23:59";
-            }
+            if (Strings.isNullOrEmpty(heureFin)){heureFin = "23:59";}
             Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
 
             //initialisation de l'event pout eneregistrement
