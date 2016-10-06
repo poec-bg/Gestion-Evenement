@@ -1,14 +1,18 @@
 package controllers;
 
+import controllers.secure.Check;
+import controllers.secure.Secure;
 import models.Utilisateur;
 import play.data.validation.Required;
-import services.UtilisateurService;
-import play.Logger;
 import play.mvc.Controller;
+import play.mvc.With;
+import services.UtilisateurService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@With(Secure.class)
+@Check({"ADMIN", "USER"})
 public class UtilisateurController extends Controller{
 
 

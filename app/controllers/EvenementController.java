@@ -1,6 +1,7 @@
 package controllers;
 
-import com.sun.xml.internal.bind.v2.TODO;
+import controllers.secure.Check;
+import controllers.secure.Secure;
 import models.Evenement;
 import models.Invite;
 import models.Utilisateur;
@@ -8,6 +9,7 @@ import models.types.Categorie;
 import org.joda.time.DateTime;
 import play.data.validation.Required;
 import play.mvc.Controller;
+import play.mvc.With;
 import services.EvenementService;
 import services.UtilisateurService;
 
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@With(Secure.class)
+@Check({"ADMIN", "USER"})
 public class EvenementController extends Controller{
 
     public static void findEvents(){
