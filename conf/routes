@@ -9,16 +9,19 @@ GET     /contact                                Application.contact
 GET     /apropos                                Application.apropos
 
 # Utilisateur
-GET     /utilisateurList                        UtilisateurController.userList
-GET     /utilisateur/{email}                    UtilisateurController.user
+GET     /utilisateurs                           UtilisateurController.findUsers
+GET     /utilisateur/{email}                    UtilisateurController.getUser
 GET     /nouveaucompte                          UtilisateurController.newUser
+POST    /utilisateur/enregistrer                UtilisateurController.saveUser
 
 # Evenement
-POST    /evenements/filtrer                     EvenementController.eventListDate
-GET     /evenements/                            EvenementController.eventList
+POST    /evenements/filtrerDate                 EvenementController.findEventsByDate
+POST    /evenements/filtrerCategorie            EvenementController.findEventsByCategorie
+GET     /evenements/                            EvenementController.findEvents
 GET     /evenement/nouveau                      EvenementController.newEvent
+POST    /evenement/enregistrer                  EvenementController.saveEvent
 GET     /evenement/modifier                     EvenementController.updateEvent
-GET     /evenement/{idEvenement}                EvenementController.event
+GET     /evenement/{idEvenement}                EvenementController.getEvent
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
