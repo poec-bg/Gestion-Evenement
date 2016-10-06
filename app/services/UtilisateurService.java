@@ -3,12 +3,12 @@ package services;
 
 import exceptions.InvalidArgumentException;
 import models.Utilisateur;
-import org.bouncycastle.util.Strings;
-import org.hibernate.*;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import validators.EmailValidator;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -145,6 +145,30 @@ public class UtilisateurService {
         session.close();
     }
 
+   // Authentification
+
+    public boolean authenticate(String email, String motDePasse) throws Exception {
+
+        List<String> validationMessages = new ArrayList<>();
+        if (email== null || email== "") {
+            validationMessages.add("L'email ne peut être null ou vide");
+        }
+        if (motDePasse== null || motDePasse== "")  {
+            validationMessages.add("Le motDePasse ne peut être null ou vide");
+        }
+        if (validationMessages.size() > 0) {
+            throw new InvalidArgumentException((String[]) validationMessages.toArray(new String[0]));
+        }
+        Session session = HibernateUtils.getSession();
+        Query query = session.createQuery("from Utilisateur where email =:email");
+        query.setString("email", email);
+        Utilisateur utilisateur = (Utilisateur) query.uniqueResult();
+        if (utilisateur == null) {
+            return false;
+        }
+        session.close();
+        return false;
+    }
 
 
       // Lister les utilisateurs
@@ -172,11 +196,18 @@ public class UtilisateurService {
 
     }
 
-    public void deleteUtilisateur(Utilisateur utilisateur) throws InvalidArgumentException {
+    //Récuperer un utilisateur par nom
+    public Utilisateur getUtilisateurByName(String nom) {
+        Session session= HibernateUtils.getSession();
+        Utilisateur utilisateur=(Utilisateur) session.get(Utilisateur.class, nom);
+        return utilisateur;
+    }
+
+    public void deleteUtilisateur(Utilisateur utilisateur) throws Exception {
         if (utilisateur == null) {
-            throw new InvalidArgumentException(new String[] { "L'utilisateur ne peut ?re null" });
+            throw new Exception( "L'utilisateur ne peut ?re null" );
         }
-        utilisateur.isSupprime = true;
+        utilisateur.isSupprime=true;
         Session session = HibernateUtils.getSession();
         Transaction t = session.beginTransaction();
         session.update(utilisateur);
@@ -184,15 +215,21 @@ public class UtilisateurService {
         session.close();
     }
 
+//    public void  deleteUtilisateur(Utilisateur utilisateur) throws Exception {
+//        Session session = HibernateUtils.getSession();
+//        Transaction tx = null;
+//        utilisateur.isSupprime = true;
+//        try{
+//            tx = session.beginTransaction();
+//            session.update(utilisateur);
+//            tx.commit();
+//        }catch (HibernateException e) {
+//            if (tx!=null) tx.rollback();
+//            throw new Exception("HibernateException: " + e.getMessage() );
+//        }finally {
+//            session.close();
+//        }
+//    }
 
-    public void clear() {
-        Session session = HibernateUtils.getSession();
-        Transaction tx=session.beginTransaction();
 
-        //creation de la requette
-        Query q =session.createQuery("delete Utilisateur ");
-        //Exécution de la requete
-        q.executeUpdate();
-        tx.commit();
-    }
 }
