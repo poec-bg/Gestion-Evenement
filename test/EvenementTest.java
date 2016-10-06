@@ -7,7 +7,6 @@ import org.junit.Test;
 import services.EvenementService;
 import services.HibernateUtils;
 import services.UtilisateurService;
-
 import java.util.Date;
 import java.util.List;
 

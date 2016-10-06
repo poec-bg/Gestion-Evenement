@@ -85,7 +85,9 @@ public class EvenementService {
         return listResultats;
     }
 
-    //Récupération d'un évènement par son ID
+    /* Récupération d'un évènement par son ID
+     * RETURN : Null si non trouvé.
+     */
     public Evenement getEvent(long id){
         Session session = HibernateUtils.getSession();
             Evenement resultat = (Evenement) session.get(Evenement.class, id);
@@ -150,8 +152,12 @@ public class EvenementService {
             return false;
         }
         //règle l'id doit faire partie des utilisateurs connus
-        //TODO a compléter avec UtilisateurService
-        return true;
+        Utilisateur reponse = UtilisateurService.get().getUtilisateurByEmail(utilisateur.email);
+        if(reponse == null){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     private boolean validateNom(String nom){
