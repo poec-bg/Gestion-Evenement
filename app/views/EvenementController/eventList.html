@@ -3,18 +3,33 @@
 
 <div class="container">
     <h1>Liste des évenements :</h1>
+    <form action="@{EvenementController.eventListDate}" method="post">
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Date de début</span>
+            <input class="form-control" type="date" name="dateDebut" value="${dateDebut.format("YYYY-MM-dd")}">
+            <span class="error">#{error 'dateDebutString' /}</span>
+
+            <span class="input-group-addon" id="basic-addon2">Date de fin</span>
+            <input class="form-control" type="date" name="dateFin" value="${dateFin.format("YYYY-MM-dd")}">
+            <span class="error">#{error 'dateFinString' /}</span>
+        </div>
+        <div class="input-group">
+            <input class="btn btn-primary" type="submit" value="Rafraîchir">
+        </div>
+    </form>
+
 #{if evenementList == null}
-    <h3><i>pas d'évenement</i></h3>
+    <h3><i>pas d'évenement sur la période indiquée</i></h3>
 #{/if}
 #{else }
     #{list evenementList, as:'event'}
         <div class="container">
             <ul class="list-group">
                 <li class="list-group-item" >
-                    ${event?.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event?.dateFin?.format("dd/MM/YY HH:mm")} :
+                ${event?.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event?.dateFin?.format("dd/MM/YY HH:mm")} :
                     <a href="@{EvenementController.event(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
                 </li>
-                *{<li class="list-group-item">${event.description}</li>}*
+            *{<li class="list-group-item">${event.description}</li>}*
             </ul>
         </div>
     #{/list}

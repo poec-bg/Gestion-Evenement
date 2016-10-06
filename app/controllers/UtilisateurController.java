@@ -39,7 +39,7 @@ public class UtilisateurController extends Controller{
             if (prenom != null && prenom != "") {
                 utilisateur.prenom = prenom;
             }
-            utilisateur = UtilisateurService.get().create(email, nom, prenom, motDePasse);
+            utilisateur = UtilisateurService.get().create(email, motDePasse, nom, prenom);
         } catch (Exception e) {
             e.printStackTrace();
         }

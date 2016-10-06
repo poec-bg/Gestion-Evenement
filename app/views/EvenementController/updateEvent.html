@@ -1,0 +1,66 @@
+#{extends 'main.html' /}
+#{set title:'Calendar - modifier un évenement' /}
+
+<div class="container">
+    <h1>Modifer l'évenement :</h1>
+    <div class="container clearfix">
+    #{ifErrors}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Erreur lors de la modification de l'évenement !<br>
+            Verifiez que tous les champs soient correctement remplis
+        </div>
+    #{/ifErrors}
+        <form action="@{EvenementController.saveModificatedEvent()}" method="post">
+            <h2>paramètres :</h2>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Nom</span>
+                <input class="form-control" type="text" name="nom" value="${event?.nom}">
+                <span class="error">#{error 'nom' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">Description</span>
+                <input class="form-control" type="text" name="description" value="${event?.description}">
+                <span class="error">#{error 'description' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Lieu</span>
+                <input class="form-control" type="text" name="lieu" value="${event?.lieu}">
+                <span class="error">#{error 'lieu' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">Date de début</span>
+                <input class="form-control" type="date" name="dateDebutString" value="${event.dateDebut?.format("yyyy-MM-dd")}">
+                <span class="error">#{error 'dateDebutString' /}</span>
+
+                <span class="input-group-addon" id="basic-addon5">Heure de début</span>
+                <input class="form-control" type="time" name="heureDebut" value="${event.dateDebut?.format("HH:mm")}">
+                <span class="error">#{error 'heureDebut' /}</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon6">Date de fin</span>
+                <input class="form-control" type="date" name="dateFinString" value="${event.dateFin?.format("yyyy-MM-dd")}">
+                <span class="error">#{error 'dateFinString' /}</span>
+
+                <span class="input-group-addon" id="basic-addon7">Heure de fin</span>
+                <input class="form-control" type="time" name="heureFin" value="${event.dateFin?.format("HH:mm")}">
+                <span class="error">#{error 'heureFin' /}</span>
+            </div>
+            <div>
+                <input type="hidden" name="idEvenement" value="${event.idEvenement}">
+                <input type="hidden" name="emailCreateur" value="${event.createur.email}">
+            </div>
+
+            <div class="pull-left input-group">
+                <input class="btn btn-primary" type="submit" value="Energistrer les modifications">
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-warning" href="javascript:history.back()">Annuler</a>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+</div>

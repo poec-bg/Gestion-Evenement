@@ -3,11 +3,14 @@
 
 <div class="container">
     <h1>Liste des évenements :</h1>
-    <div class="container">
+    <div class="container clearfix">
         <ul class="list-group">
-            <li class="list-group-item active"><strong>${event.nom}</strong> - Lieu : ${event?.lieu}</li>
+            <li class="list-group-item active">
+                <strong>${event.nom}</strong> - Lieu : ${event?.lieu}
+                <a href="@{EvenementController.updateEvent(event.idEvenement)}" class="btn btn-warning pull-right">Modifier</a>
+            </li>
             <li class="list-group-item">
-                <strong>Date - </strong>début : ${event.dateDebut} - fin : ${event.dateFin}
+                <strong>Date - </strong>début : ${event.dateDebut.format("dd/MM/YY - HH:mm")} - fin : ${event.dateFin.format("dd/MM/YY - HH:mm")}
             </li>
             <li class="list-group-item">${event?.description}</li>
         #{if event.invites.size() == 0}
@@ -19,13 +22,12 @@
                 <div class="container">
                     #{list event.invites, as:'invite'}
                         <br>
-                        <!--TODO ajouter le lien vers l'invite-->
-                        <a href="#">${invite.email}</a>
+                        <span>${invite.email}</span>
                     #{/list}
                 </div>
             </li>
         #{/else}
         </ul>
     </div>
-    <a href="javascript:history.back()" class="btn btn-default">Retour</a>
+    <a href="@{EvenementController.eventList}" class="btn btn-default">Retour</a>
 </div>
