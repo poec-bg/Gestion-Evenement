@@ -111,9 +111,7 @@ public class EvenementController extends Controller{
             }
             Date dateFin = sdf.parse("" + dateFinString + " " + heureFin + "");
 
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.email = "test@email.com";
-            utilisateur.motDePasse = "test";
+            Utilisateur utilisateur = controllers.secure.Security.connectedUser();
             event = EvenementService.get().addEvent(dateDebut, dateFin, nom, utilisateur);
             EvenementController.getEvent(event.idEvenement);
         } catch (Exception e) {
