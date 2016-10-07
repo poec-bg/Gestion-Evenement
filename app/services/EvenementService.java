@@ -1,8 +1,10 @@
 package services;
 
+import com.google.common.base.Strings;
 import models.Evenement;
 import models.Utilisateur;
 import models.types.Categorie;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.joda.time.DateTime;
@@ -151,10 +153,9 @@ public class EvenementService {
     public Evenement addEventsRepeat(Evenement event, TypeRepetition typeRepetition) throws Exception {
         Logger.debug(TAG + " addEventRepeat: [%s %s]", (event!=null?event.toString() : "null"), (typeRepetition!=null?typeRepetition.getNb() + " " + typeRepetition.type : "null") );
         //vérifications
-        if( !validateEvent(event) | typeRepetition == null){
+        if( !validateEvent(event) || typeRepetition == null){
             throw new Exception("Invalide argument exception.");
         }else {
-            Evenement premiereEvent = null;
             event.idRepetition = generateIdRepetition();
             DateTime dateFinRepetition = new DateTime(event.dateDebut).plusYears(NB_ANNEES_RECURENCE);
             DateTime dateDebut = new DateTime(event.dateDebut);
@@ -331,7 +332,7 @@ public class EvenementService {
 
     private boolean validateNom(String nom){
         //règle : le nom ne peut être vide
-        if(nom == null | nom == ""){
+        if(StringUtils.isBlank(nom)){
             return false;
         }
         return true;
