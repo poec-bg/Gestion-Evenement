@@ -121,6 +121,7 @@ public class EvenementController extends Controller{
             event.dateFin = dateFin;
             event.createur = utilisateur;
             event.categorie = Categorie.valueOf(optionsRadios);
+            event.idRepetition = 123146L;
 
             if (Strings.isNullOrEmpty(event.description) || Strings.isNullOrEmpty(description)) {
                 event.description = description;
@@ -152,9 +153,9 @@ public class EvenementController extends Controller{
             String heureDebut,
             @Required String dateFinString,
             String heureFin,
-            Categorie couleur,
+            String optionsRadios,
             @Required long idEvenement) {
-        Logger.debug(TAG + "saveModificatedEvent: [%s %s %s %s %s %s %s %s %s]", nom, description, lieu, dateDebutString, heureDebut, dateFinString, heureFin, (couleur!=null?couleur.getLabel() : "null"), idEvenement);
+        Logger.debug(TAG + "saveModificatedEvent: [%s %s %s %s %s %s %s %s %s]", nom, description, lieu, dateDebutString, heureDebut, dateFinString, heureFin, optionsRadios, idEvenement);
         try {
 
             //formatage des dates(String) et heures(String) en date*(Date)
@@ -174,18 +175,23 @@ public class EvenementController extends Controller{
             event.dateDebut = dateDebut;
             event.dateFin = dateFin;
             event.createur = controllers.secure.Security.connectedUser();
-            if (event.categorie == null) {
-                event.categorie = Categorie.GREEN;
-            } else {
-                //TODO changer la couleur en fonction du paramète choisi
-                event.categorie = couleur;
-            }
+            event.categorie = Categorie.valueOf(optionsRadios);
+            event.idRepetition = 123146L;
 
             EvenementService.get().updateEvent(event);
             EvenementController.getEvent(event.idEvenement);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void deleteEvent(Long idEvenement) {
+        try {
+            EvenementService.get().deleteEvent(EvenementService.get().getEvent(idEvenement));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        EvenementController.findEvents();
     }
 
 }
