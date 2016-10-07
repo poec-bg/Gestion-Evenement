@@ -1,4 +1,5 @@
 import models.Evenement;
+import models.Invite;
 import models.Utilisateur;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
@@ -384,5 +385,4 @@ public class EvenementTest {
         }
         fail();
     }
-
 }
