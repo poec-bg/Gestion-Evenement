@@ -48,8 +48,8 @@ public class EvenementTest {
 
     @AfterClass
     public static void clearTests(){
-        EvenementService.get().clearTest();
-        UtilisateurService.get().clear();
+//        EvenementService.get().clearTest();
+//        UtilisateurService.get().clear();
     }
 
 //Tests sur les fonctions : addEvent
@@ -335,4 +335,54 @@ public class EvenementTest {
         }
         fail();
     }
+//Tests sur la fonction : deleteEventsRepeatFrom
+    @Test
+    public void deleteEventsRepeatFrom_ok(){
+        Evenement eventTest;
+        try {
+            eventTest =  EvenementService.get().addEventsRepeat(evenementTest1, EvenementService.TypeRepetition.ANNUEL);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            EvenementService.get().deleteEventsRepeatFrom(eventTest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+            return;
+        }
+        assertNull( EvenementService.get().getEvent(eventTest.idEvenement) );
+    }
+    @Test
+    public void deleteEventsRepeatFrom_okUnique(){
+        Evenement eventTest;
+        try {
+            eventTest =  EvenementService.get().addEvent(evenementTest1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            EvenementService.get().deleteEventsRepeatFrom(eventTest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+            return;
+        }
+        assertNull( EvenementService.get().getEvent(eventTest.idEvenement) );
+    }
+    @Test
+    public void deleteEventsRepeatFrom_eventNull(){
+        try {
+            EvenementService.get().deleteEventsRepeatFrom(null);
+        } catch (Exception e) {
+            assertTrue(true);
+            return;
+        }
+        fail();
+    }
+
 }

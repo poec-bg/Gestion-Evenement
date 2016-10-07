@@ -208,13 +208,53 @@ public class EvenementService {
         }
     }
 
+    /*
+     * Supprime l'évènement en entré et ses frères suivant (même catégorie + dateDebut > ).
+     */
+    public void deleteEventsRepeatFrom(Evenement event) throws Exception {
+        Logger.debug(TAG + " deleteEventsRepeatFrom : [%s]", (event!=null?event.toString():"null") );
+        //verifications :
+        if(event == null){
+            Logger.error(TAG + " deleteEventsRepeatFrom : Null input argument exception.");
+            throw new Exception("Null argument exception.");
+        }
+        //Cas pas de répéitions
+        if(event.idRepetition == null){
+            Logger.debug(TAG + "deleteEventsRepeatFrom : idRepetition is null, redirect to deleteEvent.");
+            deleteEvent(event);
+            return;
+        }
+
+        //Préparation et execution de la requête:
+        int result = 0;
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            Query query = session.createSQLQuery("DELETE FROM Evenement WHERE idRepetition = :idRep AND dateDebut >= :dtDebut");
+            query.setLong("idRep", event.idRepetition);
+            query.setDate("dtDebut", event.dateDebut);
+            result = query.executeUpdate();
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            Logger.error(TAG + "deleteEventsRepeatFrom : HibernateException, " + e.getMessage());
+            throw new Exception("HibernateException: " + e.getMessage() );
+        }finally {
+            session.close();
+        }
+        Logger.debug(TAG + "deleteEventsRepeatFrom : %d rows delete.", result);
+    }
+
+   
+
     //Donne idRepetition non utilisé (max +1) dans la bdd
-    private long generateIdRepetition(){
+    private Long generateIdRepetition(){
         Logger.debug(TAG + " generateIdRepetition : []");
         Session session = HibernateUtils.getSession();
             Criteria criteria = session.createCriteria(Evenement.class)
                     .setProjection(Projections.max("idRepetition"));
-            long id = 1;
+            Long id = 1L;
             if(criteria.uniqueResult() != null){
                 id = (long) criteria.uniqueResult() + 1;
             }
