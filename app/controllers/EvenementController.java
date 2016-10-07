@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 @With(Secure.class)
 @Check({"ADMIN", "USER"})
@@ -39,20 +40,16 @@ public class EvenementController extends Controller{
         render(evenementList, dateDebut, dateFin);
     }
 
-    public static void findEventsByDate(Date dateDebut, Date dateFin){
-        Logger.debug(TAG + "findEventsByDate: [%s %s]", dateDebut, dateFin);
+    public static void findEventsByCategorie(Date dateDebut, Date dateFin, String optionsRadios){
+        Logger.debug(TAG + "findEventsByCategorie: [%s %s %s]", dateDebut, dateFin, optionsRadios);
         List<Evenement> evenementList;
 
-        evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
-        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin);
-    }
-
-    public static void findEventsByCategorie(Date dateDebut, Date dateFin, Categorie categorie){
-        Logger.debug(TAG + "findEventsByCategorie: [%s %s %s]", dateDebut, dateFin, categorie.getLabel());
-        List<Evenement> evenementList;
-
-        evenementList = EvenementService.get().listEvent(dateDebut, dateFin, categorie);
-        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin, categorie);
+        if(Strings.isNullOrEmpty(optionsRadios) || optionsRadios.contains("ALL")) {
+            evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
+        } else {
+            evenementList = EvenementService.get().listEvent(dateDebut, dateFin, Categorie.valueOf(optionsRadios));
+        }
+        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin, optionsRadios);
     }
 
     public static void getEvent(Long idEvenement){

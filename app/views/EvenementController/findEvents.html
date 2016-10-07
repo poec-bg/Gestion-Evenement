@@ -3,7 +3,7 @@
 
 <div class="container clearfix">
     <h1>Liste des évenements :</h1>
-    <form action="@{EvenementController.findEventsByDate}" method="post" class="form-inline">
+    <form action="@{EvenementController.findEventsByCategorie}" method="post" class="form-inline">
         <div class="form-group">
             <label>Filtrer du </label>
             <input class="form-control" type="date" name="dateDebut" value="${dateDebut.format("YYYY-MM-dd")}">
@@ -14,9 +14,57 @@
             <input class="form-control" type="date" name="dateFin" value="${dateFin.format("YYYY-MM-dd")}">
             <span class="error">#{error 'dateFinString' /}</span>
         </div>
-        <input class="btn btn-primary" type="submit" value="Rafraîchir">
+
+        <input class="btn btn-primary" type="submit" value="Rechercher">
+
+        <div class="container">
+            Catégorie :
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios5" value="ALL" checked>
+                Tous
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios5" value="${models.types.Categorie.GREEN}">
+                ${models.types.Categorie.GREEN.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="${models.types.Categorie.RED}">
+                    ${models.types.Categorie.RED.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="${models.types.Categorie.BLACK}" >
+                    ${models.types.Categorie.BLACK.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios3" value="${models.types.Categorie.BLUE}" >
+                    ${models.types.Categorie.BLUE.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios4" value="${models.types.Categorie.CYAN}" >
+                    ${models.types.Categorie.CYAN.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios6" value="${models.types.Categorie.MAGENTA}" >
+                ${models.types.Categorie.MAGENTA.getLabelFR()}
+                </label>
+            </div>
+        </div>
     </form>
 </div>
+
 <div class="container">
 #{if evenementList == null || evenementList.size() == 0}
     <h3 class="alert alert-warning" role="alert"><i>pas d'évenement sur la période indiquée</i></h3>

@@ -21,7 +21,6 @@ GET     /utilisateur/{email}                    UtilisateurController.getUser
 GET     /connexion                              UtilisateurController.login
 
 # Evenement
-POST    /evenements/filtrerDate                 EvenementController.findEventsByDate
 POST    /evenements/filtrerCategorie            EvenementController.findEventsByCategorie
 GET     /evenements/                            EvenementController.findEvents
 GET     /evenement/nouveau                      EvenementController.newEvent
