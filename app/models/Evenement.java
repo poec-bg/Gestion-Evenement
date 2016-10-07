@@ -12,18 +12,19 @@ public class Evenement implements Serializable{
     public long idEvenement;
     @ManyToOne(optional = false, cascade= CascadeType.ALL)
     public Utilisateur createur;
+    @Column(nullable = false)
     public String nom;
     public String description;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
     public Date dateDebut;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
     public Date dateFin;
     public String lieu;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement")
     public List<Invite> invites = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     public Categorie categorie;
-    public long idRepetition;
+    public Long idRepetition = null;
 
     @Override
     public String toString() {

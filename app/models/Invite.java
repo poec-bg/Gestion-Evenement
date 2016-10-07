@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 public class Invite implements Serializable {
-    @Id
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
     private long numLign;
     @Column(name = "email", nullable = false)
     public String email;
