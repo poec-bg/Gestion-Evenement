@@ -14,7 +14,7 @@
     #{/ifErrors}
         <form action="@{EvenementController.saveEvent()}" method="post">
             <h2>paramètres :</h2>
-            <div class="container">
+            <div class="container form-inline">
                 Catégorie :
                 <div class="input-group">
                     <label>
@@ -22,7 +22,7 @@
                                name="optionsRadios"
                                id="optionsRadios5"
                                value="${models.types.Categorie.GREEN}"
-                               checked="checked"
+                               checked="checked">
                     ${models.types.Categorie.GREEN.getLabelFR()}
                     </label>
                 </div>
@@ -31,7 +31,7 @@
                         <input type="radio"
                                name="optionsRadios"
                                id="optionsRadios1"
-                               value="${models.types.Categorie.RED}"
+                               value="${models.types.Categorie.RED}">
                     ${models.types.Categorie.RED.getLabelFR()}
                     </label>
                 </div>
@@ -40,7 +40,7 @@
                         <input type="radio"
                                name="optionsRadios"
                                id="optionsRadios2"
-                               value="${models.types.Categorie.BLACK}"
+                               value="${models.types.Categorie.BLACK}">
                     ${models.types.Categorie.BLACK.getLabelFR()}
                     </label>
                 </div>
@@ -49,7 +49,7 @@
                         <input type="radio"
                                name="optionsRadios"
                                id="optionsRadios3"
-                               value="${models.types.Categorie.BLUE}"
+                               value="${models.types.Categorie.BLUE}">
                     ${models.types.Categorie.BLUE.getLabelFR()}
                     </label>
                 </div>
@@ -58,7 +58,7 @@
                         <input type="radio"
                                name="optionsRadios"
                                id="optionsRadios4"
-                               value="${models.types.Categorie.CYAN}"
+                               value="${models.types.Categorie.CYAN}">
                     ${models.types.Categorie.CYAN.getLabelFR()}
                     </label>
                 </div>
@@ -67,7 +67,7 @@
                         <input type="radio"
                                name="optionsRadios"
                                id="optionsRadios6"
-                               value="${models.types.Categorie.MAGENTA}"
+                               value="${models.types.Categorie.MAGENTA}">
                     ${models.types.Categorie.MAGENTA.getLabelFR()}
                     </label>
                 </div>
