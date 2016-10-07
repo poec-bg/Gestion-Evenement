@@ -1,13 +1,16 @@
 package controllers;
 
 import models.Utilisateur;
+import play.data.validation.Email;
 import play.data.validation.Required;
+import play.data.validation.Valid;
 import play.mvc.Controller;
 import services.UtilisateurService;
 
 public class Application extends Controller {
 
     public static void index() {
+        flash.success("bien connecté");
         render();
     }
 
@@ -25,7 +28,7 @@ public class Application extends Controller {
 
     public static void saveUser(String nom,
                                 String prenom,
-                                @Required String email,
+                                @Required@Valid@Email String email,
                                 @Required String motDePasse) {
         Utilisateur utilisateur = new Utilisateur();
         try {

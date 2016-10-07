@@ -3,6 +3,7 @@ package services;
 import models.Evenement;
 import models.Utilisateur;
 import models.types.Categorie;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.joda.time.DateTime;
@@ -32,7 +33,7 @@ public class EvenementService {
      *  Enregistre un nouvelle évènement [nom] par [idCreateur] avec pour péridode [debut] à [fin]
      *  Fait appel à sa methode soeur addEvent(Evenement evenement)
      */
-    public Evenement addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws IllegalArgumentException {
+    public Evenement addEvent(Date debut, Date fin, String nom, Utilisateur createur) throws Exception {
         Logger.debug(TAG + " addEvent: [%s %s %s]", debut, fin, (createur!=null?createur.email:"null"));
         //création de l'objet
         Evenement evenement = new Evenement();
@@ -45,11 +46,11 @@ public class EvenementService {
     }
 
     //Enregistre un nouvelle évènement à partir d'un objet Evenement [evenemnt]
-    public Evenement addEvent(Evenement evenement) throws IllegalArgumentException, HibernateException {
+    public Evenement addEvent(Evenement evenement) throws Exception {
         Logger.debug(TAG + " addEvent: [Event] %s", (evenement!=null?evenement.toString():"null") );
         //vérifications
         if(!validateEvent(evenement)){
-            throw new IllegalArgumentException("Invalide argument IllegalArgumentException.");
+            throw new Exception("Invalide argument exception.");
         }else {
             //enregistrement
             Session session = HibernateUtils.getSession();
@@ -60,7 +61,7 @@ public class EvenementService {
                 tx.commit();
             }catch (HibernateException e) {
                 if (tx!=null) tx.rollback();
-                throw e;
+                throw new Exception("HibernateException: " + e.getMessage() );
             }finally {
                 session.close();
             }
@@ -104,11 +105,11 @@ public class EvenementService {
     }
 
     //Update evenement
-    public void updateEvent(Evenement evenement) throws IllegalArgumentException, HibernateException {
+    public void updateEvent(Evenement evenement) throws Exception {
         Logger.debug(TAG + " updateEvent: [%s]", (evenement!=null?evenement.toString() : "null") );
         //vérifications
         if(!validateEvent(evenement) ){
-            throw new IllegalArgumentException("Invalide argument IllegalArgumentException.");
+            throw new Exception("Invalide argument exception.");
         }else {
             //sauvegarde
             Session session = HibernateUtils.getSession();
@@ -119,7 +120,7 @@ public class EvenementService {
                 tx.commit();
             }catch (HibernateException e) {
                 if (tx!=null) tx.rollback();
-                throw e;
+                throw new Exception("HibernateException: " + e.getMessage() );
             }finally {
                 session.close();
             }
@@ -127,17 +128,17 @@ public class EvenementService {
     }
 
     //DELETE evenement
-    public void deleteEvent(Evenement evenement) throws IllegalArgumentException {
+    public void deleteEvent(Evenement evenement) throws Exception {
         Logger.debug(TAG + " deleteEvent: [%s]", (evenement!=null?evenement.toString() : "null") );
         Session session = HibernateUtils.getSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            session.delete(evenement);
+                session.delete(evenement);
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
-            throw e;
+            throw new Exception("HibernateException: " + e.getMessage() );
         }finally {
             session.close();
         }
@@ -148,13 +149,12 @@ public class EvenementService {
     * IN : event = evenement de reference, typeRepetition = type de répétition des évènements
     * RETURN : le premier evenement enregistré.
     */
-    public Evenement addEventsRepeat(Evenement event, TypeRepetition typeRepetition) throws IllegalArgumentException {
+    public Evenement addEventsRepeat(Evenement event, TypeRepetition typeRepetition) throws Exception {
         Logger.debug(TAG + " addEventRepeat: [%s %s]", (event!=null?event.toString() : "null"), (typeRepetition!=null?typeRepetition.getNb() + " " + typeRepetition.type : "null") );
         //vérifications
-        if( !validateEvent(event) | typeRepetition == null){
-            throw new IllegalArgumentException("Invalide argument IllegalArgumentException.");
+        if( !validateEvent(event) || typeRepetition == null){
+            throw new Exception("Invalide argument exception.");
         }else {
-            Evenement premiereEvent = null;
             event.idRepetition = generateIdRepetition();
             DateTime dateFinRepetition = new DateTime(event.dateDebut).plusYears(NB_ANNEES_RECURENCE);
             DateTime dateDebut = new DateTime(event.dateDebut);
@@ -211,12 +211,12 @@ public class EvenementService {
     /*
      * Supprime l'évènement en entré et ses frères suivant (même catégorie + dateDebut > ).
      */
-    public void deleteEventsRepeatFrom(Evenement event) throws IllegalArgumentException, HibernateException {
+    public void deleteEventsRepeatFrom(Evenement event) throws Exception {
         Logger.debug(TAG + " deleteEventsRepeatFrom : [%s]", (event!=null?event.toString():"null") );
         //verifications :
         if(event == null){
-            Logger.error(TAG + " deleteEventsRepeatFrom : Null input argument IllegalArgumentException.");
-            throw new IllegalArgumentException("Null argument IllegalArgumentException.");
+            Logger.error(TAG + " deleteEventsRepeatFrom : Null input argument exception.");
+            throw new Exception("Null argument exception.");
         }
         //Cas pas de répéitions
         if(event.idRepetition == null){
@@ -239,51 +239,14 @@ public class EvenementService {
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             Logger.error(TAG + "deleteEventsRepeatFrom : HibernateException, " + e.getMessage());
-            throw e;
+            throw new Exception("HibernateException: " + e.getMessage() );
         }finally {
             session.close();
         }
         Logger.debug(TAG + "deleteEventsRepeatFrom : %d rows delete.", result);
     }
 
-    /*
-     * UPDATE des eventements de la même série (idRepeition identique) précédent celui en entré
-     * Attention : idEvenemnt, idRepetition, createur, dateDebut, dateFin et invites ne sont pas mise à jour.
-     * Pour la gestion des listes d'invité se référé à la classe InviteService.
-     */
-    public void updateEnventsRepeat(Evenement event) throws IllegalArgumentException, HibernateException {
-        Logger.debug(TAG + " updateEnventsRepeat : [%s]", (event!=null?event.toString():"null") );
-        //vérifications
-        if(!validateEvent(event) || event.idRepetition == null ){
-            Logger.error(TAG + " updateEnventsRepeat : invalide input argument.");
-            throw new IllegalArgumentException("Invalide argument IllegalArgumentException.");
-        }
-
-        //Création & execution de la requête :
-        int resultat = 0;
-        Session session = HibernateUtils.getSession();
-        Transaction tx = null;
-        try{
-            tx = session.beginTransaction();
-            Query query = session.createSQLQuery("UPDATE Evenement SET nom = :nom, description = :description, lieu = :lieu, categorie = :categorie WHERE idRepetition = :id AND dateDebut >= :dateDebut");
-                //SET
-                query.setString("nom", event.nom);
-                query.setString("description", event.description);
-                query.setString("lieu", event.lieu);
-                query.setString("categorie", event.categorie.toString() );
-                //WHERE
-                query.setLong("id", event.idRepetition);
-                query.setDate("dateDebut", event.dateDebut);
-            resultat = query.executeUpdate();
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            throw e;
-        }finally {
-            session.close();
-        }
-        Logger.debug(TAG + " updateEnventsRepeat : %d rows update.", resultat);
-    }
+   
 
     //Donne idRepetition non utilisé (max +1) dans la bdd
     private Long generateIdRepetition(){
@@ -368,7 +331,7 @@ public class EvenementService {
 
     private boolean validateNom(String nom){
         //règle : le nom ne peut être vide
-        if(nom == null | nom == ""){
+        if(StringUtils.isBlank(nom)){
             return false;
         }
         return true;

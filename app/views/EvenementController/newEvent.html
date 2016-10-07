@@ -14,9 +14,67 @@
     #{/ifErrors}
         <form action="@{EvenementController.saveEvent()}" method="post">
             <h2>paramètres :</h2>
+            <div class="container">
+                Catégorie :
+                <div class="input-group">
+                    <label>
+                        <input type="radio"
+                               name="optionsRadios"
+                               id="optionsRadios5"
+                               value="${models.types.Categorie.GREEN}"
+                               checked="checked"
+                    ${models.types.Categorie.GREEN.getLabelFR()}
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="radio"
+                               name="optionsRadios"
+                               id="optionsRadios1"
+                               value="${models.types.Categorie.RED}"
+                    ${models.types.Categorie.RED.getLabelFR()}
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="radio"
+                               name="optionsRadios"
+                               id="optionsRadios2"
+                               value="${models.types.Categorie.BLACK}"
+                    ${models.types.Categorie.BLACK.getLabelFR()}
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="radio"
+                               name="optionsRadios"
+                               id="optionsRadios3"
+                               value="${models.types.Categorie.BLUE}"
+                    ${models.types.Categorie.BLUE.getLabelFR()}
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="radio"
+                               name="optionsRadios"
+                               id="optionsRadios4"
+                               value="${models.types.Categorie.CYAN}"
+                    ${models.types.Categorie.CYAN.getLabelFR()}
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="radio"
+                               name="optionsRadios"
+                               id="optionsRadios6"
+                               value="${models.types.Categorie.MAGENTA}"
+                    ${models.types.Categorie.MAGENTA.getLabelFR()}
+                    </label>
+                </div>
+            </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Nom</span>
-                <input class="form-control" type="text" name="nom" value="rdv important">
+                <input class="form-control" type="text" name="nom" value="rdv important" required>
                 <span class="error">#{error 'nom' /}</span>
             </div>
             <div class="input-group">
@@ -31,7 +89,7 @@
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon4">Date de début</span>
-                <input class="form-control" type="date" name="dateDebutString">
+                <input class="form-control" type="date" name="dateDebutString" required>
                 <span class="error">#{error 'dateDebutString' /}</span>
 
                 <span class="input-group-addon" id="basic-addon5">Heure de début</span>
@@ -40,7 +98,7 @@
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon6">Date de fin</span>
-                <input class="form-control" type="date" name="dateFinString">
+                <input class="form-control" type="date" name="dateFinString" required>
                 <span class="error">#{error 'dateFinString' /}</span>
 
                 <span class="input-group-addon" id="basic-addon7">Heure de fin</span>
