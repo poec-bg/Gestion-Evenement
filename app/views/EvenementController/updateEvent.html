@@ -133,7 +133,10 @@
                 <input class="btn btn-primary" type="submit" value="Energistrer les modifications">
             </div>
             <div class="pull-right">
-                <a class="btn btn-warning" href="javascript:history.back()">Annuler</a>
+                <a class="btn btn-warning" href="javascript:history.back()" onclick="return confirm('Vous allez quitter cette page sans enregistrer les modifications, êtes vous sûr ?');">Annuler</a>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-danger" href="@{EvenementController.deleteEvent(event.idEvenement)}" onclick="return confirm('Etes vous sûr de vouloir supprimer l\'évenement définitivement?');"><span class="glyphicon glyphicon-erase"></span></a>
             </div>
         </form>
     </div>
