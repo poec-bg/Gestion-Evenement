@@ -1,5 +1,4 @@
 import models.Evenement;
-import models.Invite;
 import models.Utilisateur;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
@@ -301,7 +300,7 @@ public class EvenementTest {
         }
         fail();
     }
-//Tests sur la fontion : addEventsRepeat
+//Tests sur la fonction : addEventsRepeat
     @Test
     public void addEventsRepeat_ok(){
         Evenement resultat;
