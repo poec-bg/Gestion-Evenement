@@ -34,7 +34,7 @@ public class UtilisateurServiceTest {
   public void avantToutTest() {
      UtilisateurService.get().clear();
         try {
-           utilisateur = UtilisateurService.get().create("coxys@gmail.com", "iamyourfather");
+           utilisateur = UtilisateurService.get().create("coaxys@gmail.com", "iamyourfather");
 
         } catch (Exception e) {
             fail();

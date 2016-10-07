@@ -133,6 +133,7 @@ public class UtilisateurService {
         session.update(utilisateur);
         t.commit();
         session.close();
+
     }
 
     public   List <Utilisateur> listUtilisateurs( ){
@@ -214,7 +215,9 @@ public class UtilisateurService {
         Transaction tx=session.beginTransaction();
 
         //creation de la requette
-        Query q =session.createQuery("delete Utilisateur ");
+        String email ="testsEvenement@test.org";
+        Query q =session.createQuery("delete Utilisateur where email !=:email");
+        q.setString("email", email);
         //Exécution de la requete
         q.executeUpdate();
         tx.commit();
