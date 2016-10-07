@@ -10,7 +10,7 @@ import java.util.*;
 public class Evenement implements Serializable{
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     public long idEvenement;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     public Utilisateur createur;
     @Column(nullable = false)
     public String nom;
@@ -20,7 +20,7 @@ public class Evenement implements Serializable{
     @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
     public Date dateFin;
     public String lieu;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "evenement", cascade=CascadeType.REMOVE)
     public List<Invite> invites = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     public Categorie categorie;
