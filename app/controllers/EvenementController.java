@@ -96,8 +96,8 @@ public class EvenementController extends Controller{
                                  String heureDebut,
                                  @Required String dateFinString,
                                  String heureFin,
-                                 Categorie couleur){
-        Logger.debug(TAG + "saveEvent: [%s %s %s %s %s %s %s %s]", nom, description, lieu, dateDebutString, heureDebut, dateFinString, heureFin, (couleur!=null?couleur.getLabel() : "null"));
+                                 String optionsRadios){
+        Logger.debug(TAG + "saveEvent: [%s %s %s %s %s %s %s %s]", nom, description, lieu, dateDebutString, heureDebut, dateFinString, heureFin, optionsRadios);
         if (validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             validation.keep(); // keep the errors for the next request
@@ -120,18 +120,13 @@ public class EvenementController extends Controller{
             event.dateDebut = dateDebut;
             event.dateFin = dateFin;
             event.createur = utilisateur;
+            event.categorie = Categorie.valueOf(optionsRadios);
 
             if (Strings.isNullOrEmpty(event.description) || Strings.isNullOrEmpty(description)) {
                 event.description = description;
             }
             if (Strings.isNullOrEmpty(event.lieu) || Strings.isNullOrEmpty(lieu)) {
                 event.lieu = lieu;
-            }
-            if (event.categorie == null) {
-                event.categorie = Categorie.GREEN;
-            } else {
-                //TODO changer la couleur en fonction du paramète choisi
-                event.categorie = couleur;
             }
 
             event = EvenementService.get().addEvent(event);
