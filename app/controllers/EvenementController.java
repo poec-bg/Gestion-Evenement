@@ -121,7 +121,6 @@ public class EvenementController extends Controller{
             event.dateFin = dateFin;
             event.createur = utilisateur;
             event.categorie = Categorie.valueOf(optionsRadios);
-            event.idRepetition = 123146L;
 
             if (Strings.isNullOrEmpty(event.description) || Strings.isNullOrEmpty(description)) {
                 event.description = description;
@@ -176,7 +175,6 @@ public class EvenementController extends Controller{
             event.dateFin = dateFin;
             event.createur = controllers.secure.Security.connectedUser();
             event.categorie = Categorie.valueOf(optionsRadios);
-            event.idRepetition = 123146L;
 
             EvenementService.get().updateEvent(event);
             EvenementController.getEvent(event.idEvenement);
