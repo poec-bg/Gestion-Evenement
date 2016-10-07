@@ -3,7 +3,7 @@
 
 <div class="container clearfix">
     <h1>Liste des évenements :</h1>
-    <form action="@{EvenementController.findEventsByDate}" method="post" class="form-inline">
+    <form action="@{EvenementController.findEventsByCategorie}" method="post" class="form-inline">
         <div class="form-group">
             <label>Filtrer du </label>
             <input class="form-control" type="date" name="dateDebut" value="${dateDebut.format("YYYY-MM-dd")}">
@@ -14,9 +14,99 @@
             <input class="form-control" type="date" name="dateFin" value="${dateFin.format("YYYY-MM-dd")}">
             <span class="error">#{error 'dateFinString' /}</span>
         </div>
-        <input class="btn btn-primary" type="submit" value="Rafraîchir">
+
+        <input class="btn btn-primary" type="submit" value="Rechercher">
+
+        <div class="container">
+            Catégorie :
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios5"
+                           value="ALL"
+                    #{if flash.get("checked").contains("ALL")}
+                           checked="checked"
+                    #{/if}>
+                    Tous
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios5"
+                           value="${models.types.Categorie.GREEN}"
+                    #{if flash.get("checked").contains(models.types.Categorie.GREEN as String)}
+                           checked="checked"
+                    #{/if}>
+                ${models.types.Categorie.GREEN.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios1"
+                           value="${models.types.Categorie.RED}"
+                    #{if flash.get("checked").contains(models.types.Categorie.RED as String)}
+                           checked="checked"
+                    #{/if}>
+                ${models.types.Categorie.RED.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios2"
+                           value="${models.types.Categorie.BLACK}"
+                    #{if flash.get("checked").contains(models.types.Categorie.BLACK as String)}
+                           checked="checked"
+                    #{/if}>
+                ${models.types.Categorie.BLACK.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios3"
+                           value="${models.types.Categorie.BLUE}"
+                    #{if flash.get("checked").contains(models.types.Categorie.BLUE as String)}
+                           checked="checked"
+                    #{/if}>
+                ${models.types.Categorie.BLUE.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios4"
+                           value="${models.types.Categorie.CYAN}"
+                    #{if flash.get("checked").contains(models.types.Categorie.CYAN as String)}
+                           checked="checked"
+                    #{/if}>
+                ${models.types.Categorie.CYAN.getLabelFR()}
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="radio"
+                           name="optionsRadios"
+                           id="optionsRadios6"
+                           value="${models.types.Categorie.MAGENTA}"
+                    #{if flash.get("checked").contains(models.types.Categorie.MAGENTA as String)}
+                           checked="checked"
+                    #{/if}>
+                ${models.types.Categorie.MAGENTA.getLabelFR()}
+                </label>
+            </div>
+        </div>
     </form>
 </div>
+
 <div class="container">
 #{if evenementList == null || evenementList.size() == 0}
     <h3 class="alert alert-warning" role="alert"><i>pas d'évenement sur la période indiquée</i></h3>
@@ -25,12 +115,13 @@
     #{list evenementList, as:'event'}
         <div class="container">
             <ul class="list-group">
-                <li class="list-group-item" >
+                <li class="list-group-item">
                     #{if event.categorie != null}
                         <img src="/public/images/${event.categorie.getLabel()}.png">
                     #{/if}
-                ${event?.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event?.dateFin?.format("dd/MM/YY HH:mm")} :
-                    <a href="@{EvenementController.getEvent(event.idEvenement)}"><strong>${event.nom}</strong> (${event.lieu})</a>
+                ${event.dateDebut?.format("dd/MM/YY - HH:mm")} - ${event.dateFin?.format("dd/MM/YY HH:mm")} :
+                    <a href="@{EvenementController.getEvent(event.idEvenement)}"><strong>${event.nom}</strong>
+                        (${event.lieu})</a>
                 </li>
             *{<li class="list-group-item">${event.description}</li>}*
             </ul>

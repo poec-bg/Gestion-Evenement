@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 @With(Secure.class)
 @Check({"ADMIN", "USER"})
@@ -36,23 +37,23 @@ public class EvenementController extends Controller{
         List<Evenement> evenementList;
         evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
 
+        flash("checked", "ALL");
+
         render(evenementList, dateDebut, dateFin);
     }
 
-    public static void findEventsByDate(Date dateDebut, Date dateFin){
-        Logger.debug(TAG + "findEventsByDate: [%s %s]", dateDebut, dateFin);
+    public static void findEventsByCategorie(Date dateDebut, Date dateFin, String optionsRadios){
+        Logger.debug(TAG + "findEventsByCategorie: [%s %s %s]", dateDebut, dateFin, optionsRadios);
         List<Evenement> evenementList;
 
-        evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
-        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin);
-    }
-
-    public static void findEventsByCategorie(Date dateDebut, Date dateFin, Categorie categorie){
-        Logger.debug(TAG + "findEventsByCategorie: [%s %s %s]", dateDebut, dateFin, categorie.getLabel());
-        List<Evenement> evenementList;
-
-        evenementList = EvenementService.get().listEvent(dateDebut, dateFin, categorie);
-        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin, categorie);
+        if(Strings.isNullOrEmpty(optionsRadios) || optionsRadios.contains("ALL")) {
+            flash("checked", "ALL");
+            evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
+        } else {
+            evenementList = EvenementService.get().listEvent(dateDebut, dateFin, Categorie.valueOf(optionsRadios));
+            flash("checked", optionsRadios);
+        }
+        renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin, optionsRadios);
     }
 
     public static void getEvent(Long idEvenement){
@@ -95,8 +96,8 @@ public class EvenementController extends Controller{
                                  String heureDebut,
                                  @Required String dateFinString,
                                  String heureFin,
-                                 Categorie couleur){
-        Logger.debug(TAG + "saveEvent: [%s %s %s %s %s %s %s %s]", nom, description, lieu, dateDebutString, heureDebut, dateFinString, heureFin, (couleur!=null?couleur.getLabel() : "null"));
+                                 String optionsRadios){
+        Logger.debug(TAG + "saveEvent: [%s %s %s %s %s %s %s %s]", nom, description, lieu, dateDebutString, heureDebut, dateFinString, heureFin, optionsRadios);
         if (validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             validation.keep(); // keep the errors for the next request
@@ -119,18 +120,13 @@ public class EvenementController extends Controller{
             event.dateDebut = dateDebut;
             event.dateFin = dateFin;
             event.createur = utilisateur;
+            event.categorie = Categorie.valueOf(optionsRadios);
 
             if (Strings.isNullOrEmpty(event.description) || Strings.isNullOrEmpty(description)) {
                 event.description = description;
             }
             if (Strings.isNullOrEmpty(event.lieu) || Strings.isNullOrEmpty(lieu)) {
                 event.lieu = lieu;
-            }
-            if (event.categorie == null) {
-                event.categorie = Categorie.GREEN;
-            } else {
-                //TODO changer la couleur en fonction du paramète choisi
-                event.categorie = couleur;
             }
 
             event = EvenementService.get().addEvent(event);

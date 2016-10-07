@@ -2,9 +2,9 @@
 #{set title:'Calendar - Sommaire' /}
 
 <div class="container">
-    <h1>Application calendrier :</h1>
+    <h1>Application calendrier : ${flash.get("success")}</h1>
     <div class="container btn-group">
-        <a class="btn btn-primary" href="@{EvenementController.newEvent}">
+        <a class="btn btn-primary" href="@{EvenementController.newEvent}" title="create event">
             Créer un évenement
         </a>
         <a class="btn btn-default" href='@{EvenementController.findEvents}'>
