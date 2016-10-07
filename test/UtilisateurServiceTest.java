@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import services.HibernateUtils;
 import services.UtilisateurService;
 
 import java.util.List;
@@ -12,36 +13,33 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-/**
- * Created by Administrateur on 03/10/2016.
- */
-public class UtilisateurServiceTest {
 
+public class UtilisateurServiceTest {
    Utilisateur utilisateur;
 
     @BeforeClass
     public static void avantClass() {
+            HibernateUtils.HibernateTest();
         System.out.println("Avant la classe UtilisateurServiceTest\n");
     }
 
     @AfterClass
     public static void apresClasse() {
 
-      //  UtilisateurService.get().clear();
+     //  UtilisateurService.get().clear();
 
     }
 
     @Before
-    public void avantToutTest() {
-       UtilisateurService.get().clear();
+  public void avantToutTest() {
+     UtilisateurService.get().clear();
         try {
-            utilisateur = UtilisateurService.get().create("luke.skywalker@hotmail.com", "iamyourfather");
+           utilisateur = UtilisateurService.get().create("coxys@gmail.com", "iamyourfather");
 
         } catch (Exception e) {
             fail();
         }
-    }
-
+   }
 
     // creer
     @Test
@@ -101,47 +99,104 @@ public class UtilisateurServiceTest {
     @Test
     public void testCreer_OK() {
         // Given
-        String email = "anakin.skywalker@gmail.com";
+
+        String email = "koko@m2i.com";
         String password = "iamyourfather";
 
         // When
         try {
             Utilisateur utilisateur = UtilisateurService.get().create(email, password);
             // Then
-            assertEquals("anakin.skywalker@gmail.com", utilisateur.email);
+            assertEquals("koko@m2i.com", utilisateur.email);
+
         } catch (Exception e) {
             fail();
         }
     }
 
+
     @Test
     public void testLister_twoUtilisateur() throws Exception {
         // Given
-        // enregistrer un premier Client
-        Utilisateur utilisateur1 = UtilisateurService.get().create("yan.tot@msn.com", "azerty");
-        // enregistrer un deuxième Client
-       Utilisateur utilisateur2 = UtilisateurService.get().create("han.solo@gmail.com", "0123456789");
 
+        // enregistrer un premier Client
+        utilisateur = UtilisateurService.get().create("azerty@test.fr", "12324");
+        // enregistrer un deuxième Client
+       Utilisateur utilisateur2 = UtilisateurService.get().create("coca@msn.com","azerty");
 
         // When
         List<Utilisateur>utilisateurs = UtilisateurService.get().listUtilisateurs();
 
         // Then
-        assertEquals(3, utilisateurs.size());
+        assertEquals(4, utilisateurs.size());
     }
 
     @Test
-    public void testRemove_utilisateurOk() {
+    public void testSupprimer_clientNull() {
         // Given
+        Utilisateur utilisateur1 = null;
 
         // When
+        try {
+            UtilisateurService.get().deleteUtilisateur(utilisateur1);
+            fail();
 
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+    }
 
-            // Then
+    @Test
+    public void testSupprimer_utilisateurOk() {
+        // Given
+        //Utilisateur utilisateur;
+        try {
+            utilisateur = UtilisateurService.get().create("test@test.fr", "12324");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
+        // When
+        try {
+            UtilisateurService.get().deleteUtilisateur(utilisateur);
+        } catch (Exception e) {
+            fail();
+        }
 
+        // Then
+        assertEquals(true, utilisateur.isSupprime);
+    }
 
+    // authenticate
+    @Test
+    public void testAuthenticate_everythingWrong() {
+        // Given
+        String email = null;
+        String motDePasse = null;
+
+        // When
+        try {
+            boolean isAuthenticate = UtilisateurService.get().authenticate(email, motDePasse);
+            fail();
+
+        } catch (Exception e) {
+            assertTrue(true);
+            return;
+        }
     }
 
 
+
+
 }
+
+
+
+
+
+
+
+
+
+

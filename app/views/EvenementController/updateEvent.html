@@ -2,7 +2,7 @@
 #{set title:'Calendar - modifier un évenement' /}
 
 <div class="container">
-    <h1>Modifer l'évenement :</h1>
+    <h1>Modifier l'évenement :</h1>
     <div class="container clearfix">
     #{ifErrors}
         <div class="alert alert-danger" role="alert">
@@ -47,9 +47,9 @@
                 <input class="form-control" type="time" name="heureFin" value="${event.dateFin?.format("HH:mm")}">
                 <span class="error">#{error 'heureFin' /}</span>
             </div>
+
             <div>
                 <input type="hidden" name="idEvenement" value="${event.idEvenement}">
-                <input type="hidden" name="emailCreateur" value="${event.createur.email}">
             </div>
 
             <div class="pull-left input-group">
