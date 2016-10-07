@@ -37,6 +37,8 @@ public class EvenementController extends Controller{
         List<Evenement> evenementList;
         evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
 
+        flash("checked", "ALL");
+
         render(evenementList, dateDebut, dateFin);
     }
 
@@ -45,9 +47,11 @@ public class EvenementController extends Controller{
         List<Evenement> evenementList;
 
         if(Strings.isNullOrEmpty(optionsRadios) || optionsRadios.contains("ALL")) {
+            flash("checked", "ALL");
             evenementList = EvenementService.get().listEvent(dateDebut, dateFin);
         } else {
             evenementList = EvenementService.get().listEvent(dateDebut, dateFin, Categorie.valueOf(optionsRadios));
+            flash("checked", optionsRadios);
         }
         renderTemplate("EvenementController/findEvents.html", evenementList, dateDebut, dateFin, optionsRadios);
     }
