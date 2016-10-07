@@ -246,7 +246,45 @@ public class EvenementService {
         Logger.debug(TAG + "deleteEventsRepeatFrom : %d rows delete.", result);
     }
 
-    
+    /*
+     * UPDATE des eventements de la même série (idRepeition identique) précédent celui en entré
+     * Attention : idEvenemnt, idRepetition, createur, dateDebut, dateFin et invites ne sont pas mise à jour.
+     * Pour la gestion des listes d'invité se référé à la classe InviteService.
+     */
+    public void updateEnventsRepeat(Evenement event) throws IllegalArgumentException, HibernateException {
+        Logger.debug(TAG + " updateEnventsRepeat : [%s]", (event!=null?event.toString():"null") );
+        //vérifications
+        if(!validateEvent(event) || event.idRepetition == null ){
+            Logger.error(TAG + " updateEnventsRepeat : invalide input argument.");
+            throw new IllegalArgumentException("Invalide argument IllegalArgumentException.");
+        }
+
+        //Création & execution de la requête :
+        int resultat = 0;
+        Session session = HibernateUtils.getSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            Query query = session.createSQLQuery("UPDATE Evenement SET nom = :nom, description = :description, lieu = :lieu, categorie = :categorie WHERE idRepetition = :id AND dateDebut >= :dateDebut");
+                //SET
+                query.setString("nom", event.nom);
+                query.setString("description", event.description);
+                query.setString("lieu", event.lieu);
+                query.setString("categorie", event.categorie.toString() );
+                //WHERE
+                query.setLong("id", event.idRepetition);
+                query.setDate("dateDebut", event.dateDebut);
+            resultat = query.executeUpdate();
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            throw e;
+        }finally {
+            session.close();
+        }
+        Logger.debug(TAG + " updateEnventsRepeat : %d rows update.", resultat);
+    }
+
     //Donne idRepetition non utilisé (max +1) dans la bdd
     private Long generateIdRepetition(){
         Logger.debug(TAG + " generateIdRepetition : []");
