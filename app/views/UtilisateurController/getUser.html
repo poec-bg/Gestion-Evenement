@@ -3,15 +3,17 @@
 
 <div class="container">
     <h1>Détails utilisateur :</h1>
-    #{if user == null}
-        <h3><i>Détails non disponible</i></h3>
-    #{/if}
+#{if user == null}
+    <h3><i>Détails non disponible</i></h3>
+#{/if}
     <div class="container">
         <ul class="list-group">
-            <li class="list-group-item active">${user?.prenom} <strong>${user?.nom}</strong></li>
-            #{if user.prenom == null && user.nom == null}
+        #{if user.prenom == null && user.nom == null}
             <li class="list-group-item active"><i>nom et prénom indisponible</i></li>
-            #{/if}
+        #{/if}
+        #{else }
+            <li class="list-group-item active">${user?.prenom} <strong>${user?.nom}</strong></li>
+        #{/else}
             <li class="list-group-item">email : ${user.email}</li>
             <li class="list-group-item">mdp : ${user.motDePasse}</li>
         </ul>
